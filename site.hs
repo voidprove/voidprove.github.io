@@ -43,8 +43,7 @@ main = hakyll $ do
         compile $ do
             researchItems <- recentFirst =<< loadAll "research-items/*"
             let researchCtx =
-                    listField "researchItems" defaultContext (return researchItems) `mappend`
-                    defaultContext
+                    listField "researchItems" defaultContext (return researchItems) `mappend` defaultContext
             getResourceBody
                 >>= applyAsTemplate researchCtx
                 >>= loadAndApplyTemplate "templates/default-no-title.html" (defaultContext `mappend` constField "research.html" "Yes")
