@@ -31,25 +31,92 @@ body {
     width: 50%;
     margin: 0 auto;
 }
-@media (min-width: 820px) {
-    main {
-        width: 820px;
-        margin: 0 auto;
-    }
-    .about-page-table {
-        margin: 0 auto;
-    }
-    .about-width-wrap {
-        width: 820px;
-        margin: 0 auto;
+/* @media (min-width: 640px) and (max-width: 900px) { */
+/*     main { */
+/*         margin: 0 30px; */
+/*     } */
+/*     .about-width-wrap { */
+/*         margin: 0 auto; */
+/*     } */
+/*     .research-width-wrap { */
+/*         width: 740px; */
+/*         margin: 0 auto; */
+/*     } */
+/*     .teaching-width-wrap { */
+/*         width: 740px; */
+/*         margin: 0 auto; */
+/*     } */
+/* } */
+@media (min-width: 100px) {
+    .about-page-grid {
+        column-count: 1;
+        padding: 0 20px;
     }
     .research-width-wrap {
-        width: 720px;
+        max-width: 740px;
         margin: 0 auto;
     }
     .teaching-width-wrap {
-        width: 620px;
+        max-width: 740px;
         margin: 0 auto;
+    }
+    footer .about-width-wrap {
+        margin: 0 20px;
+        max-width: 840px;
+        column-count: 1;
+    }
+    footer .research-width-wrap {
+        margin: 0 20px;
+        max-width: 840px;
+        column-count: 1;
+    }
+    footer .teaching-width-wrap {
+        margin: 0 20px;
+        max-width: 840px;
+        column-count: 1;
+    }
+}
+@media (min-width: 900px) {
+    main {
+        width: 840px;
+        margin: 0 auto;
+    }
+    .about-page-grid {
+        column-count: 2;
+        margin: 0 auto;
+    }
+    .about-width-wrap {
+        width: 840px;
+        margin: 0 auto;
+    }
+    .research-width-wrap {
+        max-width: 740px;
+        margin: 0 auto;
+    }
+    .teaching-width-wrap {
+        width: 740px;
+        margin: 0 auto;
+    }
+    footer .about-width-wrap {
+        width: 840px;
+        margin: 0 auto;
+        display: grid;
+        column-count : 4;
+        grid-template-columns: 1fr 1fr 1fr 2fr;
+    }
+    footer .research-width-wrap {
+        width: 840px;
+        margin: 0 auto;
+        display: grid;
+        column-count : 4;
+        grid-template-columns: 1fr 1fr 1fr 2fr;
+    }
+    footer .teaching-width-wrap {
+        width: 840px;
+        margin: 0 auto;
+        display: grid;
+        column-count : 4;
+        grid-template-columns: 1fr 1fr 1fr 2fr;
     }
     .teaching-semester {
         padding-right:12rem;
@@ -99,11 +166,12 @@ nav a.current-page{
     border-bottom: 1px solid #f7f7f7;
 }
 
-blockquote {
+.about-page-grid blockquote {
     font-style: italic;
+    text-align: right;
     border-left: 4px solid #ddd;
     margin: 10px 0 10px 0;
-    padding-left: 20px;
+    padding-left: 15px;
     line-height: 1.5;
     color: #888;
 }
@@ -175,15 +243,9 @@ footer {
 footer * {
     text-align: left;
 }
-footer ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-}
-footer li {
-    float: left;
+footer .footer-item {
     margin-right: 4rem;
+    margin-bottom: 1rem;
 }
 footer p{
     text-align: left;
