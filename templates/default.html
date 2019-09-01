@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        $partial("templates/head-part.html")$
+    </head>
+    <body>
+        $partial("templates/header.html")$
+
+        <main role="main">
+            $if(title)$
+              <h1>$title$</h1>
+            $endif$
+
+            $body$
+        </main>
+
+        $partial("templates/footer.html")$
+
+    </body>
+    $partial("templates/post-scripts.html")$
+</html>

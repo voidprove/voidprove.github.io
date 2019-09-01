@@ -1,0 +1,8 @@
+---
+title: 'When Do Introspection Axioms Matter for Multi-Agent Epistemic Reasoning?'
+preprintURL: 'https://arxiv.org/abs/1907.09101'
+slidesURL: '/files/introspection-slides.pdf'
+authorAndPubStatus: 'Joint with Wesley Holliday and Cedegao Zhang; in TARK 2019.'
+abstract: | 
+  The early literature on epistemic logic in philosophy focused on reasoning about the knowledge or belief of a single agent, especially on controversies about "introspection axioms" such as the 4 and 5 axioms. By contrast, the later literature on epistemic logic in computer science and game theory has focused on multi-agent epistemic reasoning, with the single-agent 4 and 5 axioms largely taken for granted. In the relevant multi-agent scenarios, it is often important to reason about what agent A believes about what agent B believes about what agent A believes; but it is rarely important to reason just about what agent A believes about what agent A believes. This raises the question of the extent to which single-agent introspection axioms actually matter for multi-agent epistemic reasoning. In this paper, we formalize and answer this question. To formalize the question, we first define a set of multi-agent formulas that we call agent-alternating formulas, including formulas like Box_a Box_b Box_a p but not formulas like Box_a Box_a p. We then prove, for the case of belief, that if one starts with multi-agent K or KD, then adding both the 4 and 5 axioms (or adding the B axiom) does not allow the derivation of any new agent-alternating formulas -- in this sense, introspection axioms do not matter. By contrast, we show that such conservativity results fail for knowledge and multi-agent KT, though they hold with respect to a smaller class of agent-nonrepeating formulas.
+---
