@@ -23,16 +23,16 @@ main = hakyll $ do
         route   idRoute
         compile copyFileCompiler
 
-    -- match (fromList ["about.rst", "contact.markdown"]) $ do
-    --     route   $ setExtension "html"
-    --     compile $ pandocCompiler
-    --         >>= loadAndApplyTemplate "templates/default.html" defaultContext
-    --         >>= relativizeUrls
-
-    match "index.html" $ do
-        route $ idRoute
+    match "about.html" $ do
+        route   idRoute
         compile $ getResourceBody
-            >>= loadAndApplyTemplate "templates/default-no-title.html" (defaultContext `mappend` constField "index.html" "Yes") 
+            >>= loadAndApplyTemplate "templates/default-no-title.html" (constField "about.html" "Yes" `mappend` defaultContext)
+            >>= relativizeUrls
+
+    match "about.html" $ version "indexPage" $ do
+        route   $ constRoute "index.html"
+        compile $ getResourceBody
+            >>= loadAndApplyTemplate "templates/default-no-title.html" (constField "about.html" "Yes" `mappend` defaultContext)
             >>= relativizeUrls
 
     match "research-items/*" $ do
@@ -42,11 +42,9 @@ main = hakyll $ do
         route idRoute
         compile $ do
             researchItems <- recentFirst =<< loadAll "research-items/*"
-
             let researchCtx =
                     listField "researchItems" defaultContext (return researchItems) `mappend`
                     defaultContext
-
             getResourceBody
                 >>= applyAsTemplate researchCtx
                 >>= loadAndApplyTemplate "templates/default-no-title.html" (defaultContext `mappend` constField "research.html" "Yes")
@@ -92,6 +90,12 @@ main = hakyll $ do
     --             >>= applyAsTemplate indexCtx
     --             >>= loadAndApplyTemplate "templates/default.html" indexCtx
     --             >>= relativizeUrls
+
+    -- match (fromList ["about.rst", "contact.markdown"]) $ do
+    --     route   $ setExtension "html"
+    --     compile $ pandocCompiler
+    --         >>= loadAndApplyTemplate "templates/default.html" defaultContext
+    --         >>= relativizeUrls
 
     match "templates/*" $ compile templateBodyCompiler
 
