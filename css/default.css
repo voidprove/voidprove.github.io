@@ -31,6 +31,33 @@ body {
     width: 50%;
     margin: 0 auto;
 }
+@media (min-width: 820px) {
+    main {
+        width: 820px;
+        margin: 0 auto;
+    }
+    .index-page-table {
+        margin: 0 auto;
+    }
+    .index-width-wrap {
+        width: 820px;
+        margin: 0 auto;
+    }
+    .research-width-wrap {
+        width: 720px;
+        margin: 0 auto;
+    }
+    .teaching-width-wrap {
+        width: 620px;
+        margin: 0 auto;
+    }
+    .teaching-semester {
+        padding-right:12rem;
+        white-space: nowrap;
+        overflow-x: hidden;
+    }
+}
+
 
 a {
     text-decoration: none;
@@ -145,23 +172,19 @@ footer {
     padding: 1.2rem 0;
     color: #555;
 }
-
 footer * {
     text-align: left;
 }
-
 footer ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
     overflow: hidden;
 }
-
 footer li {
     float: left;
     margin-right: 4rem;
 }
-
 footer p{
     text-align: left;
     margin: 0;
@@ -173,7 +196,6 @@ footer p{
     margin-inline-end: 0px;
     line-height: 1.1rem;
 }
-
 .footer-item-header {
     margin:0 ;
     padding: 0;
@@ -183,51 +205,20 @@ footer p{
 h1 {
     font-size: 1.8rem;
 }
-
 h2 {
     font-size: 1.4rem;
 }
-
 article .header {
     font-size: 1.4rem;
     font-style: italic;
     color: #555;
 }
-
 .logo a {
     font-weight: bold;
     color: #000;
     text-decoration: none;
 }
 
-@media (max-width: 319px) {
-    body {
-        width: 90%;
-        margin: 0;
-        padding: 0 5%;
-    }
-    header {
-        margin: 4.2rem 0;
-    }
-    nav {
-        margin: 0 auto 3rem;
-        text-align: center;
-    }
-    footer {
-        text-align: center;
-    }
-    .logo {
-        text-align: center;
-        margin: 1rem auto 3rem;
-    }
-    .logo a {
-        font-size: 2.4rem;
-    }
-    nav a {
-        display: block;
-        line-height: 1.6;
-    }
-}
 
 /* @media (min-width: 320px) { */
 /*     body { */
@@ -258,20 +249,3 @@ article .header {
 /*     } */
 /* } */
 
-@media (min-width: 820px) {
-    main {
-        width: 820px;
-        margin: 0 auto;
-    }
-    .index-page-table {
-        margin: 0 auto;
-    }
-    .footer-width-wrap {
-        width: 820px;
-        margin: 0 auto;
-    }
-    .research-wrap {
-        width: 720px;
-        margin: 0 auto;
-    }
-}

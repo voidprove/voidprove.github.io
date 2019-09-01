@@ -7,7 +7,9 @@
         $partial("templates/header.html")$
 
         <main class="main-width-wrap" role="main">
-            $body$
+            <div class=$if(index.html)$"index-width-wrap"$endif$$if(research.html)$"research-width-wrap"$endif$$if(teaching.html)$"teaching-width-wrap"$endif$>
+                $body$
+            </div>
         </main>
 
         $partial("templates/footer.html")$

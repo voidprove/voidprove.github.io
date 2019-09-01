@@ -52,9 +52,9 @@ main = hakyll $ do
                 >>= loadAndApplyTemplate "templates/default-no-title.html" (defaultContext `mappend` constField "research.html" "Yes")
                 >>= relativizeUrls
 
-    match "teaching.markdown" $ do
-        route $ setExtension "html"
-        compile $ pandocCompiler
+    match "teaching.html" $ do
+        route $ idRoute
+        compile $ getResourceBody
             >>= loadAndApplyTemplate "templates/default-no-title.html" (defaultContext `mappend` constField "teaching.html" "Yes")
             >>= relativizeUrls
 
