@@ -50,6 +50,8 @@ body {
 @media (min-width: 100px) {
     .about-page-grid {
         column-count: 1;
+    }
+    .about-width-wrap {
         padding: 0 20px;
     }
     .research-width-wrap {
@@ -61,32 +63,39 @@ body {
         margin: 0 auto;
     }
     footer .about-width-wrap {
-        margin: 0 20px;
-        max-width: 840px;
+        /* padding: 0 20px; */
+        /* max-width: 840px; */
         column-count: 1;
     }
     footer .research-width-wrap {
-        margin: 0 20px;
+        padding-left: 20px;
         max-width: 840px;
         column-count: 1;
     }
     footer .teaching-width-wrap {
-        margin: 0 20px;
+        padding-left: 20px;
         max-width: 840px;
         column-count: 1;
     }
+    .teaching-table .odd {
+        display: grid;
+        background-color: rgb(245, 181, 195, 0.08);
+    }
+    .teaching-table .even {
+        display: grid;
+    }
 }
-@media (min-width: 900px) {
+@media (min-width: 600px) {
     main {
-        width: 840px;
-        margin: 0 auto;
+        /* max-width: 840px; */
+        /* margin: 0 auto; */
     }
     .about-page-grid {
         column-count: 2;
         margin: 0 auto;
     }
     .about-width-wrap {
-        width: 840px;
+        max-width: 840px;
         margin: 0 auto;
     }
     .research-width-wrap {
@@ -94,34 +103,44 @@ body {
         margin: 0 auto;
     }
     .teaching-width-wrap {
-        width: 740px;
+        max-width: 640px;
         margin: 0 auto;
     }
     footer .about-width-wrap {
-        width: 840px;
+        max-width: 840px;
         margin: 0 auto;
         display: grid;
         column-count : 4;
-        grid-template-columns: 1fr 1fr 1fr 2fr;
+        grid-template-columns: 150px 150px 150px auto;
     }
     footer .research-width-wrap {
-        width: 840px;
+        max-width: 840px;
         margin: 0 auto;
         display: grid;
         column-count : 4;
-        grid-template-columns: 1fr 1fr 1fr 2fr;
+        grid-template-columns: 150px 150px 150px auto;
     }
     footer .teaching-width-wrap {
-        width: 840px;
+        max-width: 840px;
         margin: 0 auto;
         display: grid;
         column-count : 4;
-        grid-template-columns: 1fr 1fr 1fr 2fr;
+        grid-template-columns: 150px 150px 150px auto;
     }
     .teaching-semester {
         padding-right:12rem;
         white-space: nowrap;
         overflow-x: hidden;
+    }
+    .teaching-table .odd {
+        display: grid;
+        column-count: 2;
+        grid-template-columns: 220px auto;
+    }
+    .teaching-table .even {
+        display: grid;
+        column-count: 2;
+        grid-template-columns: 220px auto;
     }
 }
 
@@ -244,7 +263,6 @@ footer * {
     text-align: left;
 }
 footer .footer-item {
-    margin-right: 4rem;
     margin-bottom: 1rem;
 }
 footer p{
