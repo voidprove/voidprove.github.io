@@ -1,0 +1,8 @@
+---
+title: 'The Logic of Comparative Cardinality'
+preprintURL: 'https://escholarship.org/uc/item/2nn3c35x'
+slidesURL: '/files/comp-card-slides.pdf'
+authorAndPubStatus: 'Joint with Matthew Harrison-Trainer and Wesley Holliday; Forthcoming in Journal of Symbolic Logic.'
+abstract: | 
+  This paper investigates the principles that one must add to Boolean algebra to capture reasoning not only about intersection, union, and complementation of sets, but also about the relative size of sets. We completely axiomatize such reasoning under the Cantorian definition of relative size in terms of injections.
+---
