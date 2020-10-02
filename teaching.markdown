@@ -13,4 +13,7 @@
 2018 Fall                                             Phil 149: ​Special Topics in Philosophy of Logic and Mathematics: Nonclassical Logic  
 2019 Spring                                           Phil 25B: Modern Philosophy                                                          
 2019 Summer                                           Phil W12A: Introduction to Logic                                                     
+2019 Fall                                             Phil 140A: Intermediate Logic
+2020 Spring                                           Phil 12A: Introduction to Logic
+2020 Fall                                             Phil 143: Modal Logic
 -------------                                         ------------------------------------------------------------------
