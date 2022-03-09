@@ -1,5 +1,5 @@
 ---
-title: 'On the Logic of Belief and Propositional Quantififaction'
+title: 'On the Logic of Belief and Propositional Quantification'
 preprintURL: 'https://escholarship.org/uc/item/7476g21w'
 publisherURL: 'https://doi.org/10.1007/s10992-021-09595-8'
 slidesURL: '/files/sino-russia-belief.pdf'
