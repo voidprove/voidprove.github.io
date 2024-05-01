@@ -1,0 +1,7 @@
+---
+title: 'Some General Completeness Results for Propositionally Quantified Modal Logics'
+preprintURL: '/files/AiML2024.pdf'
+authorAndPubStatus: 'Joint with Yipu Li'
+abstract: | 
+  We study the completeness problem for propositionally quantified modal logics on quantifiable general frames, where the admissible sets are the propositions the quantifiers can range over and expressible sets of worlds are admissible, and Kripke frames, where the quantifiers range over all sets of worlds. We show that any normal propositionally quantified modal logic containing all instances of the Barcan scheme is strongly complete with respect to the class of quantifiable general frames validating it. We also provide a suﬀicient condition for the truth of all formulas, possibly with quantifiers, to be preserved under passing from a quantifiable general frame to its underlying Kripke frame. This is reminiscent of both the idea of elementary submodel in model theory and the persistence concepts in propositional modal logic. The key to this condition is the concept of finite generated diversity (Fritz 2023), and with it, we show that if Θ is a set of Sahlqvist formulas whose class of Kripke frames has finite generated diversity, then the smallest normal propositionally quantified modal logic containing Θ, Barcan, a formula stating the existence of world propositions, and a formula stating the definability of successor sets, is Kripke complete. As a special case, we have a simple finite axiomatization of the logic of Euclidean Kripke frames.
+---
