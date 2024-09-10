@@ -76,8 +76,6 @@ body {
 }
 
 @media (min-width:600px) {
-    main {}
-
     .about-page-grid {
         column-count: 2;
         margin: 0 auto
@@ -223,7 +221,8 @@ nav a.current-page {
     white-space: pre;
     position: absolute;
     z-index: -10;
-    font-size: small text-shadow:2px 2px 3px rgba(0, 0, 0, 0);
+    font-size: small;
+    text-shadow:2px 2px 3px rgba(0, 0, 0, 0);
     -webkit-transform: translate(2px, 0px) rotate(0deg);
     -o-transform: translate(2px, 0px) rotate(0deg);
     -moz-transform: translate(2px, 0px) rotate(0deg);
