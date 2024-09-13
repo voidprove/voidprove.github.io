@@ -4,3 +4,4 @@ _site/
 build.sh
 *.sh
 .DS_Store
+**/.DS_Store
