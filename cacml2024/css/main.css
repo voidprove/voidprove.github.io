@@ -532,7 +532,6 @@ a.tosu {
 .responsive-table .parallel-left {
   flex-basis: 45%;
   text-align: center;
-  max-width: 200px;
   display: grid;
   grid-row: auto;
   justify-content: center;
@@ -543,7 +542,6 @@ a.tosu {
 .responsive-table .parallel-right {
   flex-basis: 45%;
   text-align: center;
-  max-width: 200px;
   display: grid;
   grid-row: auto;
   justify-content: center;
