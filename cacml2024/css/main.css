@@ -470,6 +470,30 @@ pre > code {
   fill: #828282;
 }
 
+/**
+ * Table
+ */
+table {
+  display: block;
+  width: 100%;
+  overflow: auto;
+  word-break: normal;
+  word-break: keep-all;
+  -webkit-overflow-scrolling: touch;
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin-block: 1rem;
+}
+
+table th {
+  font-weight: bold;
+}
+
+table th, table td {
+  padding: 0.5rem 1rem;
+  border: 1px solid #e9ebec;
+}
+
 a.tosu {
   color: #b00000;
   background: #f5f5f5;
@@ -489,38 +513,72 @@ a.tosu {
 
 .responsive-table .time-slot {
   flex-basis: 10%;
-  vertical-align: middle;
   display: flex;
   justify-content: center;
   align-items: center;
+  text-align: center;
+  vertical-align: middle;
 }
 .responsive-table .plenary {
   flex-basis: 90%;
   text-align: center;
+  display: grid;
+  grid-row: auto;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  vertical-align: middle;
 }
 .responsive-table .parallel-left {
   flex-basis: 45%;
   text-align: center;
+  max-width: 200px;
+  display: grid;
+  grid-row: auto;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  vertical-align: middle;
 }
 .responsive-table .parallel-right {
   flex-basis: 45%;
   text-align: center;
+  max-width: 200px;
+  display: grid;
+  grid-row: auto;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  vertical-align: middle;
 }
 .responsive-table .room-info {
   background-color: #ffffff;
   border-color: whitesmoke;
   border-width: 0.1em;
-  border-style: solid;
+  border-style: none;
   border-top: none;
   border-right: none;
   border-left: none;
   margin-bottom: 5px;
   padding-bottom: 5px;
+  margin-left: 2rem;
+  margin-right: 2rem;
 }
 .responsive-table .talk-title {
   font-weight: bold;
 }
 .responsive-table li {
+  padding: 10px;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  background-color: #ffffff;
+  border-color: whitesmoke;
+  border-width: 0.1em;
+  border-style: solid;
+  border-bottom: none;
+}
+.responsive-table .topborderless {
   padding: 10px;
   display: flex;
   justify-content: space-between;
@@ -529,6 +587,15 @@ a.tosu {
   border-width: 0.1em;
   border-style: solid;
   border-bottom: none;
+  border-top: none;
+}
+.responsive-table .program-li-last {
+  padding: 10px;
+  justify-content: space-between;
+  background-color: #ffffff;
+  border-color: whitesmoke;
+  border-width: 0.1em;
+  border-style: solid;
 }
 .responsive-table .program-break {
   padding: 5px;
@@ -586,48 +653,6 @@ a.tosu {
 .responsive-table .col-4 ul {
   margin-bottom: 0;
 }
-@media all and (max-width: 767px) {
-  .responsive-table .table-header {
-    display: none;
-  }
-  .responsive-table li {
-    display: block;
-  }
-  .responsive-table .col {
-    flex-basis: 100%;
-  }
-  .responsive-table .col {
-    display: block;
-    padding: 10px 0;
-  }
-  .responsive-table .col:before {
-    color: #6C7A89;
-    padding-right: 10px;
-    content: attr(data-label);
-    flex-basis: 50%;
-    text-align: right;
-  }
-  .responsive-table .col-1 {
-    display: block;
-    padding: 10px 0;
-  }
-  .responsive-table .col-1:before {
-    content: none;
-  }
-  .responsive-table .col-4 {
-    padding: 0;
-  }
-  .responsive-table .col-4:before {
-    content: none;
-  }
-  .responsive-table .col-1-2 {
-    text-align: left;
-  }
-  .responsive-table .date-spliter {
-    display: none;
-  }
-}
-
 .no-p-margin p {
   margin-bottom: 0;
 }
