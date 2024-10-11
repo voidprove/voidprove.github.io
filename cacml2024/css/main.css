@@ -370,6 +370,15 @@ h6 {
 }
 
 /**
+ * Anchor
+ */
+.anchor {
+  position: absolute;
+  transform: translateY(-33vh);
+  top: 33%;
+}
+
+/**
  * Links
  */
 a {
@@ -562,6 +571,7 @@ a.tosu {
 }
 .responsive-table .talk-title {
   font-weight: bold;
+  position: relative;
 }
 .responsive-table li {
   padding: 10px;
