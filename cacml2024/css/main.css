@@ -374,8 +374,8 @@ h6 {
  */
 .anchor {
   position: absolute;
-  transform: translateY(-33vh);
-  top: 33%;
+  transform: translateY(-25vh);
+  top: 25%;
 }
 
 /**
@@ -525,6 +525,7 @@ a.tosu {
   align-items: center;
   text-align: center;
   vertical-align: middle;
+  padding-right: 5px;
 }
 .responsive-table .plenary {
   flex-basis: 90%;
