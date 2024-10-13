@@ -519,16 +519,18 @@ a.tosu {
 }
 
 .responsive-table .time-slot {
-  flex-basis: 10%;
+  flex-basis: 6%;
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
   vertical-align: middle;
-  padding-right: 5px;
+  padding-right: 3px;
+  margin-left: -3px;
+  min-width: 3em;
 }
 .responsive-table .plenary {
-  flex-basis: 90%;
+  flex-basis: 94%;
   text-align: center;
   display: grid;
   grid-row: auto;
@@ -538,7 +540,7 @@ a.tosu {
   vertical-align: middle;
 }
 .responsive-table .parallel-left {
-  flex-basis: 45%;
+  flex-basis: 47%;
   text-align: center;
   display: grid;
   grid-row: auto;
@@ -548,7 +550,7 @@ a.tosu {
   vertical-align: middle;
 }
 .responsive-table .parallel-right {
-  flex-basis: 45%;
+  flex-basis: 47%;
   text-align: center;
   display: grid;
   grid-row: auto;
