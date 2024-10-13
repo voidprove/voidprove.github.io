@@ -255,7 +255,7 @@
     box-shadow: none; /* Standard. Opera 10.5, IE9 */
     display: block;
     font-family: "Titillium Web", Helvetica, Arial, Verdana, sans-serif;
-    position: relative;
+    position: absolute;
     min-width: 215px;
     max-width: 215px;
     top: auto;
