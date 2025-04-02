@@ -1,3 +1,4 @@
+set -e
 # Temporarily store uncommited changes
 git stash
 
@@ -7,11 +8,10 @@ git checkout develop
 # Build new files
 stack exec site clean
 stack exec site build
-cp -a BISFORM2025 _site
 
 # Get previous files
 git fetch --all
-git checkout -b master --track origin/master
+git checkout -B master --track origin/master
 
 # Overwrite existing files with new files
 cp -a _site/. .
