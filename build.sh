@@ -7,6 +7,7 @@ git checkout develop
 # Build new files
 stack exec site clean
 stack exec site build
+cp -a BISFORM2025 _site
 
 # Get previous files
 git fetch --all
