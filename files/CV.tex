@@ -1,0 +1,305 @@
+\documentclass[11pt,a4paper,sans,unicode]{moderncv} % Font sizes: 10, 11, or 12; paper sizes: a4paper, letterpaper, a5paper, legalpaper, executivepaper or landscape; font families: sans or roman
+\moderncvstyle{classic} % CV theme - options include: 'casual' (default), 'classic', 'oldstyle' and 'banking'
+\moderncvcolor{blue} % CV color - options include: 'blue' (default), 'orange', 'green', 'red', 'purple', 'grey' and 'black'
+\usepackage{xpatch}
+\usepackage{tikz}
+\usepackage{verbatim}
+\newcommand{\licon}{%
+    \tikz[x=1.2ex, y=1.2ex, baseline=-0.05ex]{%
+        \begin{scope}[x=1ex, y=1ex]
+            \clip (-0.1,-0.1)
+                --++ (-0, 1.2)
+                --++ (0.6, 0)
+                --++ (0, -0.6)
+                --++ (0.6, 0)
+                --++ (0, -1);
+            \path[draw,
+                line width = 0.5,
+                rounded corners=0.5]
+                (0,0) rectangle (1,1);
+        \end{scope}
+        \path[draw, line width = 0.5] (0.5, 0.5)
+            -- (1, 1);
+        \path[draw, line width = 0.5] (0.6, 1)
+            -- (1, 1) -- (1, 0.6);
+        }%
+    }
+%\usepackage{hyperref}
+\usepackage[scale=0.8]{geometry}
+
+\newcommand{\cvdoublecolumn}[2]{%
+  \cvitem[0.75em]{}{%
+    \begin{minipage}[t]{\listdoubleitemcolumnwidth}#1\end{minipage}%
+    \hfill%
+    \begin{minipage}[t]{\listdoubleitemcolumnwidth}#2\end{minipage}%
+    }%
+}
+
+% usage: \cvreference{name}{address line 1}{address line 2}{address line 3}{address line 4}{e-mail address}{phone number}
+% Everything but the name is optional
+% If \addresssymbol, \emailsymbol or \phonesymbol are specified, they will be used.
+% (Per default, \addresssymbol isn't specified, the other two are specified.)
+% If you don't like the symbols, remove them from the following code, including the tilde ~ (space).
+
+\newcommand{\cvreference}[7]{%
+    \textbf{#1}\newline% Name
+    \ifthenelse{\equal{#2}{}}{}{\addresssymbol~#2\newline}%
+    \ifthenelse{\equal{#3}{}}{}{#3\newline}%
+    \ifthenelse{\equal{#4}{}}{}{#4\newline}%
+    \ifthenelse{\equal{#5}{}}{}{#5\newline}%
+    \ifthenelse{\equal{#6}{}}{}{\emailsymbol~\texttt{#6}\newline}%
+    \ifthenelse{\equal{#7}{}}{}{\phonesymbol~#7}}
+
+% Reduce document margins
+%\setlength{\hintscolumnwidth}{3cm}
+% Uncomment to change the width of the dates column
+% \setlength{\makecvtitlenamewidth}{10cm}
+% For the 'classic' style, uncomment to adjust the width of the space allocated to your name
+\xpatchcmd{\cventry}{.\strut}{\strut}{}{}
+\xpatchcmd{\cvitem}{.\strut}{\strut}{}{}
+
+
+%----------------------------------------------------------------------------------------
+%	NAME AND CONTACT INFORMATION SECTION
+%----------------------------------------------------------------------------------------
+
+\firstname{Yifeng (Evan)} % Your first name
+\familyname{Ding} % Your last name
+
+% All information in this block is optional, comment out any lines you don't need
+\title{Curriculum Vitae}
+\address{}{Beijing, China}
+\mobile{(+86) 18810668627}
+\email{yf.ding@pku.edu.cn}
+\homepage{voidprove.github.io}
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+\hypersetup{
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan,
+}
+
+\makecvtitle
+
+\section{Academic Positions}
+
+\cventry{2021.8 -- present}{Assistant Professor}{}{}{Department of Philosophy and Religious Studies, Peking University}{}
+
+\section{Education}
+
+\cventry{2015 -- 2021}{Ph.D., Logic and the Methodology of Science}{}{}{\textit{University of California, Berkeley}}{Dissertation: \textit{Propositional Quantification in Modal Logic} \\ Committee: Wesley Holliday (Chair), Lara Buchak, Dana Scott, Seth Yalcin}
+\cventry{2011 -- 2015}{B.A., Philosophy and Economics}{}{}{\textit{Peking University}}{Thesis: \textit{Epistemic Logic with Functional Dependency Operator} \\ Thesis advisor: Yanjing Wang}
+
+\section{Areas of Research}
+
+\cvitem{AOS}{Logic (esp. Modal Logic), Decision Theory and Social Choice Theory}
+\cvitem{AOC}{Epistemology, Formal Semantics}
+
+\section{Publications}
+
+%\subsection{Submitted}
+
+%\subsection{Accepted}
+
+
+\subsection{Forthcoming}
+
+\cventry{2026}{Characterizations of Voting Rules Based on Majority Margins
+\href{https://arxiv.org/abs/2501.08595}{\licon}}{}{}{}{with Wesley Holliday and Eric Pacuit. \\ \textit{Social Choice and Welfare}.}
+
+\subsection{Published}
+
+\cventry{2026}{A General Theory of Propositional Modal Bundled Modalities~\href{https://dx.doi.org/10.4204/EPTCS.447.17}{\licon}}{}{}{}{with Yuanzhe Yang. \\ \textit{Advances in Modal Logic 2026}.}
+
+\cventry{2025}{The Logics of Individual Medvedev Frames~\href{https://doi.org/10.1093/jigpal/jzaf064}{\licon}}{}{}{}{with Zhicheng Chen. \\ \textit{Logic Journal of the IGPL}.}
+
+\cventry{2025}{An Axiomatic Characterization of Split Cycle
+\href{https://link.springer.com/article/10.1007/s00355-024-01539-w}{\licon}}
+{}{}{}{with Wesley Holliday and Eric Pacuit. \\ \textit{Social Choice and Welfare}.}
+
+\cventry{2024}{Some General Completeness Results for Propositionally Quantified Modal Logics~\href{https://arxiv.org/abs/2406.16034}{\licon}}
+{}{}{}{with Yipu Li. \\ \textit{Advances in Modal Logic 2024}.}
+
+\cventry{2024}{Saturated Models and Ultrafilter Extension for Weakly Aggregative Modal Logics~\href{https://studiesinlogic.sysu.edu.cn/zh-hans/article/304}{\licon}}
+{}{}{}{with Jixin Liu. \\ \textit{Studies in Logic}.}
+
+\cventry{2023}{Modal Logics with Non-rigid Propositional Designators
+\href{https://link.springer.com/chapter/10.1007/978-3-031-45558-2_4}{\licon}}
+{}{}{}{\textit{Logic, Rationality, and Interaction, LORI 2023}.}
+
+\cventry{2023}{Someone Knows that Local Reasoning on Hypergraphs is a Weakly Aggregative Modal Logic
+\href{https://link.springer.com/article/10.1007/s11229-022-04032-y}{\licon}}
+{}{}{}{with Jixin Liu and Yanjing Wang.\\ \textit{Synthese}.}
+
+\cventry{2022}{Model Theoretical Aspects of Weakly Aggregative Modal Logic
+\href{https://link.springer.com/article/10.1007/s10849-022-09366-x}{\licon}}
+{}{}{}{with Jixin Liu and Yanjing Wang.\\ \textit{Journal of Logic, Language, and Information}.}
+
+\cventry{2021}{Hypergraphs, Local Reasoning, and Weakly Aggregative Modal Logic
+\href{https://link.springer.com/chapter/10.1007/978-3-030-88708-7_5}{\licon}}
+{}{}{}{with Jixin Liu and Yanjing Wang\\ \textit{Logic, Rationality, and Interaction, LORI 2021}.}
+
+\cventry{2021}{Logics of Imprecise Comparative Probability
+\href{https://escholarship.org/uc/item/1m3156ps}{\licon}}
+{}{}{}{with Wesley Holliday and Thomas F. Icard, III\\ \textit{International Journal of Approximate Reasoning}.}
+
+
+\cventry{2021}{On the Logic of Belief and Propositional Quantification  \href{https://escholarship.org/uc/item/7476g21w}{\licon}}
+{}{}{}{\textit{Journal of Philosophical Logic}.}
+
+\cventry{2020}{The Logic of Comparative Cardinality \href{https://escholarship.org/uc/item/2nn3c35x}{\licon}}
+{}{}{}
+{with Matthew Harrison-Trainor and Wesley Holliday\\ \textit{The Journal of Symbolic Logic}.}
+
+\cventry{2020}{Another Problem in Possible World Semantics \href{https://escholarship.org/uc/item/27k2f44p}{\licon}}
+{}{}{}
+{with Wesley Holliday\\ \textit{Advances in Modal Logic 2020}.}
+
+\cventry{2019}{Weakly Aggregative Modal Logic: Characterization and Interpolation
+\href{https://doi.org/10.1007/978-3-662-60292-8_12}{\licon}}
+{}{}{}
+{with Jixin Liu and Yanjing Wang\\ \textit{Logic, Rationality, and Interaction, LORI 2019}.}
+
+\cventry{2019}{When Do Introspection Axioms Matter for Multi-Agent Epistemic Reasoning?
+\href{https://arxiv.org/abs/1907.09101}{\licon}}
+{}{}{}
+{with Wesley Holliday and Cedegao Zhang\\ \textit{Theoretical Aspects of Rationality and Knowledge 2019}.}
+
+\cventry{2018}{On the Logics with Propositional Quantifiers Extending S5$\mathbf{\Pi}$
+\href{http://www.aiml.net/volumes/volume12/Ding.pdf}{\licon}}
+{}{}{}
+{\textit{Advances in Modal Logic 2018}.}
+
+\cventry{2016}{Epistemic Logic with Functional Dependency Operator
+\href{https://arxiv.org/abs/1706.02048}{\licon}}
+{}{}{}
+{\textit{Studies in Logic}.}
+
+\section{Talks}
+
+\subsection{Invited}
+\cventry{4/2/2026}{Possibilities and Actuality}{}{}{}{Sun Yat-sen University, Zhuhai Campus}
+\cventry{3/23/2026}{A General Theory of Propositional Modal Bundled Modalities}{}{}{}{Workshop on Bundles in Logic, Lorentz Center, the Netherlands}
+\cventry{11/21/2025}{Logics with Actual and Potential Worlds}{}{}{}{Southwest University}
+\cventry{8/26/2025}{Forays into Voting Theory}{}{}{}{Peking University}
+\cventry{11/27/2024}{Axioms in Social Choice}{}{}{}{China University of Political Science and Law}
+\cventry{9/21/2024}{Axiomatizing the Minimax Voting Method}{}{}{}{$\Delta_{19}$-workshop on logic}
+\cventry{6/14/2024}{Some Technical Results on Modal Logics with Propositional Quantifiers}{}{}{}{Institute of Philosophy, Chinese Academy of Sciences}
+\cventry{4/29/2024}{Modal Logic and Propositional Quantification}{}{}{}{East China Normal University}
+\cventry{7/14/2023}{Logics with Non-rigid Propositional Designators}{}{}{}{Beijing International Summer Workshop on Formal Philosophy}
+\cventry{11/27/2022}{Examining the Fundamental Theorem of World Theory in Modal Logics with Propositional Quantifiers}{}{}{}{at the annual conference of the Chinese society of mathematical logic.}
+\cventry{4/8/2022}{An Axiomatic Characterization of Split Cycle}{}{}{}{Logic Seminar at Beijing Normal University}
+\cventry{11/18/2021}{Non-probabilistic Semantics for Probabilistic Judgements}{}{}{}{Logic Salon series at Tsinghua University}
+\cventry{10/28/2021}{Non-probabilistic Semantics for Probabilistic Judgements}{}{}{}{Logic, Cognition, and Interactions Lecture Series at Sichuan University}
+\cventry{10/13/2021}{The Modesty Puzzle}{}{}{}{Philosophy Symposium at Peking University}
+\cventry{5/16/2020}{The Logic of Comparative Cardinality}{}{}{}{$\Delta_{13}$-workshop on logic}
+
+\subsection{Refereed}
+\cventry{6/13/2026}{Axiomatic Characterizations of the Minimax Voting Method}{}{}{}{at the 18th Meeting of the Society for Social Choice and Welfare.}
+\cventry{9/15/2025}{An Axiomatic Characterization of the Minimax Voting Method}{}{}{}{at COMSOC 2025.}
+\cventry{8/23/2024}{Some General Completeness Results for Propositionally Quantified Modal Logics}{}{}{}{at Advances in Modal Logic 2024 (AiML).}
+\cventry{10/20/2023}{Saturated Models and Ultrafilter Extension for Weakly Aggregative Modal Logic}{}{}{}{at 17th (Chinese) National Conference on Modern Logic.}
+\cventry{10/27/2023}{Logics with Non-rigid Propositional Designators}{}{}{}{at the 9th International Conference on Logic, Rationality, and Interaction (LORI).}
+\cventry{6/23/2022}{An Axiomatic Characterization of Split Cycle}{}{}{}{at the 16th Meeting of the Society of Social Choice and Welfare}
+\cventry{10/17/2021}{Hypergraphs, Local Reasoning, and Weakly Aggregative Modal Logic}{}{}{}{at the
+ 8th International Conference on Logic, Rationality, and Interaction (LORI).}
+\cventry{8/27/2020}{Another Problem in Possible World Semantics}{}{}{}{at Advances in Modal Logic 2020 (AiML).}
+\cventry{7/19/2019}{When Do Introspection Axioms Matter for Multi-Agent Epistemic Reasoning?}{}{}{}{at the 17th Conference on Theoretical Aspects of Rationality and Knowledge (TARK).}
+\cventry{5/21/2019}{On the Modal Logic of Belief with Propositional Quantifiers}{}{}{}{at the 2019 ASL North American Annual Meeting.}
+\cventry{8/27/2018}{On the Logics with Propositional Quantifiers Extending S5$\mathbf{\Pi}$}{}{}{}{at Advances in Modal Logic 2018 (AiML).}
+\cventry{8/7/2018}{The Logic of Comparative Cardinality}{}{}{}{at BLAST 2018.}
+
+\section{Teaching}
+\subsection{At Peking University}
+\cventry{}{Introduction to Logic}{}{}{co-taught with Yanjing Wang, Bokai Yao, Shengyang Zhong.}{Spring 2022, 2023, 2024, 2025, 2026}
+\cventry{}{Modal Logic}{}{}{}{Fall 2022, 2023, 2024, 2025}
+\cventry{}{Foundations of Computability Theory}{}{}{}{Fall 2023, 2025}
+\cventry{}{Social Choice Theory}{}{}{}{Spring 2024, 2026}
+\cventry{}{Topics in Philosophical Logic}{}{}{}{Spring 2025 (Topic: higher-order logic)}
+\cventry{}{Axiomatic Set Theory}{}{}{}{Spring 2022, 2023}
+
+\subsection{As Graduate Student Instructor (equivalent to TA) at UC Berkeley}
+\cventry{}{MATH 54: Linear Algebra and Differential Equations}{}{}{}{Fall 2015, Spring 2016, Fall 2016, Spring 2017, Fall 2017}
+\cventry{}{PHILOS 12A: Introduction to Logic}{}{}{}{Summer 2016, 2017, Spring 2018, Summer 2018, Summer 2019, Spring 2020}
+\cventry{}{PHILOS 143: Modal Logic}{}{}{}{Spring 2018, Fall 2020}
+\cventry{}{PHILOS 140A: Intermediate Logic}{}{}{}{Fall 2019}
+\cventry{}{PHILOS 25B: Modern Philosophy}{}{}{}{Spring 2019}
+\cventry{}{PHILOS 149: Special Topics in Philosophy of Logic and Mathematics}{}{}{}{Fall 2018}
+
+%\section{Graduate Courses}
+%\cvitem{Spring 2020}{PHILOS 290: Foundations of Beneficial AI (Stuart Russell, Lara Buchak, Wesley Holliday, and Shachar Kariv) [Auditing]}
+%\cvitem{Spring 2020}{PHILOS 290: Infinity (Paolo Mancosu) [without a final paper]}
+%\cvitem{Fall 2018}{ECON 207A: Mathematical Economics (David Ahn)}
+%\cvitem{Fall 2018}{LINGUIS 221: Advanced Logic Semantics (Amy Rose Deal)}
+%\cvitem{Fall 2018}{PHILOS 290: Philosophy Seminar: Social Choice for Philosophers and Logicians (Wesley Holliday)}
+%\cvitem{Fall 2017}{MATH 245A: General Theory of Algebraic Structures (George Bergman)}
+%\cvitem{Fall 2016}{STAT C205A: Probability Theory (David Aldous)}
+%\cvitem{Fall 2016}{PHILOS 290: Philosophy Seminar: Intuitionistic Logic and Meaning (Wesley Holliday)}
+%\cvitem{Spring 2016}{COMPSCI 294: Special topics: Human-compatible AI (Stuart Russell and Anca Dragan)}
+%\cvitem{Spring 2016}{ELENG 219C: Computer Aided Verification (Sanjit Seshia)}
+%\cvitem{Spring 2016}{MATH 225B: Metamathematics: Recursion Theory (Theodore Slaman)}
+%\cvitem{Fall 2015}{PHILOS 290: Philosophy Seminar: Proof Theory (Paolo Mancosu)}
+%\cvitem{Fall 2015}{MATH 225A: Metamathematics: Model Theory (Thomas Scanlon)}
+%\cvitem{Fall 2015}{COMPSCI C281A: Statistical Learning Theory (Peter Bartlett)}
+
+\section{Service}
+\subsection{Refereeing}
+\cvitem{Ongoing}{\textit{Chinese Philosophical Review}, \textit{Studia Logica}, \textit{Logic Journal of IGPL}, \textit{Computability}, \textit{Philosophical Studies}, \textit{Notre Dame Journal of Formal Logic}, \textit{Annals of Pure and Applied Logic}, \textit{Journal of Philosophical Logic}, \textit{The Journal of Philosophy}, \textit{Journal of Logic Language and Information}, \textit{Artificial Intelligence}, \textit{Journal of Logic and Computation}, \textit{The Review of Symbolic Logic}, \textit{The Journal of Symbolic Logic}, \textit{Australasian Journal of Logic}, \textit{Erkenntnis}, \textit{Review of Economic Design}.}
+
+\subsection{Program Committee}
+\cvitem{2026}{Asian Workshop on Philosophical Logic 2026, Chongqing}
+\cvitem{2025}{19th National Conference on Modern Logic, Shanghai}
+\cvitem{2024}{18th National Conference on Modern Logic, Guangzhou}
+\cvitem{2023}{17th National Conference on Modern Logic, Chengdu}
+\cvitem{2022}{16th National Conference on Modern Logic, Jinan}
+\cvitem{2022}{15th National Conference on Modern Logic, Zhuhai}
+
+% \section{Awards}
+% \cvitem{2020}{\textbf{Summer Research Grant}, UC Berkeley.}
+% \cvitem{2019}{\textbf{Student Travel Grant}, Association of Symbolic Logic.}
+% \cvitem{2018}{\textbf{Student Scholarship}, NASSLLI 2018.}
+% \cvitem{2018}{\textbf{Student Travel Grant}, BLAST 2018.}
+% \cvitem{2018, 2019}{\textbf{Graduate Student Travel Grant}, UC Berkeley.}
+% \cvitem{2015}{\textbf{Excellent Graduate}, Peking University and Beijing City.}
+% \cvitem{2014}{\textbf{Leo KoGuan Scholarship}, Peking University.}
+% \cvitem{2012}{\textbf{Merit Student Pacesetter}, Peking University.}
+% \cvitem{2010}{\textbf{First Prize in National Olympiad in Informatics in Provinces} in Hunan Province.}
+
+\section{References}
+\cvdoublecolumn{
+\cvreference{Wesley Holliday}{}{UC Berkeley}{}{}{wesholliday@berkeley.edu}{}
+}{
+\cvreference{Johan van Benthem}{}{Stanford University}{}{}{jvanbenthem@uva.nl}{}
+}
+\cvdoublecolumn{
+\cvreference{Dana Scott}{}{CMU \& UC Berkeley}{}{}{dana.scott@cs.cmu.edu}{}
+}{
+\cvreference{Paolo Mancosu}{}{UC Berkeley}{}{}{mancosu@socrates.berkeley.edu}{}
+}
+
+%----------------------------------------------------------------------------------------
+%	COVER LETTER
+%----------------------------------------------------------------------------------------
+
+% To remove the cover letter, comment out this entire block
+
+%\clearpage
+
+%\recipient{HR Department}{Corporation\\123 Pleasant Lane\\12345 City, State} % Letter recipient
+%\date{\today} % Letter date
+%\opening{Dear Sir or Madam,} % Opening greeting
+%\closing{Sincerely yours,} % Closing phrase
+%\enclosure[Attached]{curriculum vit\ae{}} % List of enclosed documents
+
+%\makelettertitle % Print letter title
+
+%\lipsum[1-3] % Dummy text
+
+%\makeletterclosing % Print letter signature
+
+%----------------------------------------------------------------------------------------
+
+\end{document}
