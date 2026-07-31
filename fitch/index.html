@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="逐行编写并检查一阶逻辑 Fitch 证明。"
+    />
+    <meta name="theme-color" content="#f8fafd" />
+    <title>Fitch 证明编辑器 · Logic Lab</title>
+    <link rel="stylesheet" href="./styles.css?v=review6" />
+  </head>
+  <body>
+    <a class="skip-link" href="#editor">跳到编辑器</a>
+
+    <header class="top-app-bar">
+      <div class="top-app-bar__content">
+        <h1>Fitch 证明编辑器</h1>
+        <nav aria-label="相关页面">
+          <a class="text-link" href="/syllogisms/">三段论</a>
+          <a class="text-link" href="/about.html">主页</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="editor" class="page" tabindex="-1">
+      <section class="workspace" aria-label="Fitch 证明">
+        <section class="proof-section" aria-labelledby="proof-title">
+          <div class="section-heading section-heading--proof">
+            <div>
+              <h2 id="proof-title">证明</h2>
+              <p>前提与证明行连续编号；引用直接输入行号或子证明范围。</p>
+            </div>
+            <div class="section-heading__actions">
+              <fieldset class="mode-switch">
+                <legend class="sr-only">编辑模式</legend>
+                <label>
+                  <input type="radio" name="editor-mode" value="free" checked />
+                  <span>自由编辑</span>
+                </label>
+                <label>
+                  <input type="radio" name="editor-mode" value="test" />
+                  <span>随机测试</span>
+                </label>
+              </fieldset>
+              <button id="add-premise" class="button button--text" type="button">
+                添加前提
+              </button>
+            </div>
+          </div>
+
+          <section
+            id="challenge-panel"
+            class="challenge-panel"
+            aria-labelledby="challenge-title"
+            hidden
+          >
+            <div>
+              <h3 id="challenge-title">证明目标</h3>
+              <p id="challenge-premise-summary"></p>
+            </div>
+            <div class="challenge-target">
+              <span>结论</span>
+              <code
+                id="challenge-conclusion"
+                tabindex="0"
+                aria-label="待证明的结论"
+              ></code>
+            </div>
+            <button id="new-challenge" class="button button--outline" type="button">
+              新题
+            </button>
+          </section>
+
+          <div class="symbol-palette" role="toolbar" aria-label="逻辑符号">
+            <span>插入符号</span>
+            <button type="button" data-symbol="¬" aria-label="插入非">¬</button>
+            <button type="button" data-symbol="∧" aria-label="插入且">∧</button>
+            <button type="button" data-symbol="∨" aria-label="插入或">∨</button>
+            <button type="button" data-symbol="→" aria-label="插入蕴含">→</button>
+            <button type="button" data-symbol="↔" aria-label="插入当且仅当">↔</button>
+            <button type="button" data-symbol="∀" aria-label="插入任意">∀</button>
+            <button type="button" data-symbol="∃" aria-label="插入存在">∃</button>
+            <button type="button" data-symbol="=" aria-label="插入等号">=</button>
+          </div>
+
+          <div class="editor-actions" aria-label="证明编辑操作">
+            <button id="add-line" class="button button--tonal" type="button">
+              添加行
+            </button>
+            <button id="start-subproof" class="button button--outline" type="button">
+              设为子证明假设
+            </button>
+            <button id="exit-subproof" class="button button--outline" type="button">
+              退出当前子证明
+            </button>
+            <button id="delete-last-line" class="button button--text" type="button">
+              删除末行
+            </button>
+            <span class="editor-actions__spacer"></span>
+            <span id="action-status" class="action-status"></span>
+            <button id="check-proof" class="button button--primary" type="button">
+              检查证明
+            </button>
+          </div>
+
+          <div class="proof-columns" aria-hidden="true">
+            <span>行</span>
+            <span></span>
+            <span>公式</span>
+            <span>规则</span>
+            <span>引用</span>
+            <span></span>
+          </div>
+          <div
+            class="fitch-sheet"
+            role="region"
+            tabindex="0"
+            aria-label="证明表，可横向滚动"
+          >
+            <div class="fitch-sheet__body">
+              <ol id="premise-list" class="premise-list"></ol>
+              <div class="premise-separator" aria-hidden="true"></div>
+              <div id="proof-lines" class="proof-lines"></div>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <section id="feedback" class="feedback" hidden>
+        <div class="feedback__marker" aria-hidden="true"></div>
+        <div>
+          <h2 id="feedback-title"></h2>
+          <p id="feedback-message"></p>
+        </div>
+      </section>
+
+      <details class="syntax-guide">
+        <summary>输入语法</summary>
+        <div class="syntax-guide__content">
+          <p>
+            量词和联结词可输入 <code>∀ ∃ ¬ ∧ ∨ → ↔</code>，也可输入
+            <code>任意 存在 非 且 或 蕴含 当且仅当</code>。
+          </p>
+          <p>
+            还可使用小写反斜线命令
+            <code>\forall \exists \not \and \or \implies \iff</code>，例如
+            <code>\forall x(P(x) \implies Q(x))</code>。等号输入 <code>=</code>；不等号可输入
+            <code>≠</code> 或 <code>\neq</code>。同时支持常见别名
+            <code>\neg \lnot \land \wedge \lor \vee \to \rightarrow \leftrightarrow \ne</code>。
+            命令后若紧接字母，须用空格隔开。
+          </p>
+          <p>
+            二元联结词没有默认的优先级或结合方向。仅整个二元公式最外层的一对括号可省略；
+            嵌套的二元公式必须用括号明确分组。请写 <code>(p ∧ q) → r</code> 或
+            <code>p ∧ (q → r)</code>，不能写 <code>p ∧ q → r</code>。
+            否定词或量词若辖制二元公式，也须加括号，例如 <code>¬(p ∨ q)</code>、
+            <code>∀x(P(x) → Q(x))</code>。多余但正确配对的圆括号仍可使用。
+          </p>
+          <p>
+            变量使用 <code>x y z</code>，常元使用 <code>a b c</code>，函项使用
+            <code>f g h</code>，命题常元使用 <code>p q r</code>，谓词使用大写字母；均可带
+            <code>_10</code> 形式的下标。谓词与函项名称后须紧接左括号；它们的元数以首次出现为准。
+          </p>
+          <p>
+            否定引入和反证法所引用的子证明，末行须为
+            <code>φ ∧ ¬φ</code> 或 <code>¬φ ∧ φ</code> 形式的公式。
+          </p>
+          <p>
+            引用示例：<code>1, 3</code> 或 <code>4-7</code>。子证明引用须写出从假设到末行的完整范围。
+            当前证明及所有外层证明中先前可用的行都可引用。
+          </p>
+        </div>
+      </details>
+    </main>
+
+    <template id="premise-row-template">
+      <li class="premise-row">
+        <span class="line-number"></span>
+        <span class="scope-gutter" aria-hidden="true"></span>
+        <label class="sr-only"></label>
+        <textarea rows="1" spellcheck="false" autocapitalize="off"></textarea>
+        <span class="premise-label">前提</span>
+        <button class="icon-button remove-premise" type="button" aria-label="删除前提">×</button>
+      </li>
+    </template>
+
+    <p id="live-region" class="sr-only" aria-live="polite"></p>
+    <script type="module" src="./app.mjs?v=review6"></script>
+  </body>
+</html>

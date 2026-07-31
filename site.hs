@@ -27,6 +27,10 @@ main = hakyll $ do
         route   idRoute
         compile copyFileCompiler
 
+    match "fitch/*" $ do
+        route   idRoute
+        compile copyFileCompiler
+
     match "about.html" $ do
         route   idRoute
         compile $ getResourceBody
