@@ -29,6 +29,24 @@ assert.deepEqual(DEFAULT_CHALLENGE_POLICY.bandWeights, {
 });
 assert.equal(Object.isFrozen(DEFAULT_CHALLENGE_POLICY), true);
 assert.equal(Object.isFrozen(DEFAULT_CHALLENGE_POLICY.score.weights), true);
+assert.deepEqual(DEFAULT_CHALLENGE_POLICY.generation.advancedChanceByBand, {
+  direct: 0,
+  light: 0,
+  substantial: 0.2,
+});
+assert.equal(DEFAULT_CHALLENGE_POLICY.generation.recognizableTheoremChance, 0.65);
+assert.equal(DEFAULT_CHALLENGE_POLICY.generation.recentChallengeWindow, 64);
+assert.equal(DEFAULT_CHALLENGE_POLICY.generation.recentShapeWindow, 8);
+assert.equal(DEFAULT_CHALLENGE_POLICY.generation.recentTemplateWindow, 3);
+assert.equal(DEFAULT_CHALLENGE_POLICY.generation.oneLineCacheSize, 1024);
+assert.equal(
+  Object.isFrozen(DEFAULT_CHALLENGE_POLICY.generation.advancedChanceByBand),
+  true,
+);
+assert.equal(
+  Object.isFrozen(DEFAULT_CHALLENGE_POLICY.generation.metavariableMaxDepth),
+  true,
+);
 
 const direct = classifyDifficulty(metrics({ lineCount: 1 }));
 assert.deepEqual(direct, {
@@ -164,6 +182,35 @@ assert.throws(
 );
 assert.throws(
   () => createChallengePolicy({ generation: { maxOneLineCitations: 3 } }),
+  RangeError,
+);
+assert.throws(
+  () =>
+    createChallengePolicy({
+      generation: { advancedChanceByBand: { substantial: 1.01 } },
+    }),
+  RangeError,
+);
+assert.throws(
+  () =>
+    createChallengePolicy({
+      generation: { recognizableTheoremChance: -0.01 },
+    }),
+  RangeError,
+);
+assert.throws(
+  () => createChallengePolicy({ generation: { recentShapeWindow: -1 } }),
+  RangeError,
+);
+assert.throws(
+  () => createChallengePolicy({ generation: { oneLineCacheSize: -1 } }),
+  RangeError,
+);
+assert.throws(
+  () =>
+    createChallengePolicy({
+      generation: { metavariableMaxDepth: { substantial: 7 } },
+    }),
   RangeError,
 );
 assert.throws(() => selectDifficultyBand(1), RangeError);

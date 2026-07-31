@@ -1,7 +1,7 @@
 import {
   RULE_OPTIONS,
   normalizeRuleId,
-} from "./checker.mjs?v=review6";
+} from "./checker.mjs?v=random7";
 
 export const DIFFICULTY_BANDS = Object.freeze([
   "direct",
@@ -12,7 +12,7 @@ export const DIFFICULTY_BANDS = Object.freeze([
 // Keep every tuning knob here: changing the score or output mix should not
 // require touching the generator or any proof template.
 const DEFAULT_POLICY_VALUES = Object.freeze({
-  version: "weighted-fitch-v1",
+  version: "weighted-fitch-v2",
   score: Object.freeze({
     weights: Object.freeze({
       linesAfterFirst: 1,
@@ -40,6 +40,23 @@ const DEFAULT_POLICY_VALUES = Object.freeze({
     maxAttemptsPerBand: 64,
     maxMetavariableAttempts: 30,
     maxOneLineCitations: 2,
+    oneLineCacheSize: 1024,
+    recentChallengeWindow: 64,
+    recentShapeWindow: 8,
+    recentTemplateWindow: 3,
+    // Advanced questions form a tail within the already-selected difficulty
+    // band, so changing this value never distorts the 30/20/50 band mix.
+    advancedChanceByBand: Object.freeze({
+      direct: 0,
+      light: 0,
+      substantial: 0.2,
+    }),
+    recognizableTheoremChance: 0.65,
+    metavariableMaxDepth: Object.freeze({
+      direct: 1,
+      light: 2,
+      substantial: 3,
+    }),
   }),
 });
 
@@ -52,6 +69,7 @@ const MULTI_SUBPROOF_RULE_IDS = new Set([
   "excluded-middle",
 ]);
 const MAX_DIRECT_FORMULA_CITATIONS = 2;
+const MAX_GENERATED_METAVARIABLE_DEPTH = 6;
 
 function deepFreeze(value) {
   if (!value || typeof value !== "object" || Object.isFrozen(value)) {
@@ -82,6 +100,12 @@ function nonnegativeInteger(value, label) {
   if (!Number.isInteger(number) || number < 0) {
     throw new RangeError(`${label} 必须是非负整数`);
   }
+  return number;
+}
+
+function probability(value, label) {
+  const number = finiteNonnegative(value, label);
+  if (number > 1) throw new RangeError(`${label} 必须位于 [0, 1] 内`);
   return number;
 }
 
@@ -188,6 +212,56 @@ export function createChallengePolicy(overrides = {}) {
         }
         return value;
       })(),
+      oneLineCacheSize: nonnegativeInteger(
+        overrides.generation?.oneLineCacheSize ??
+          DEFAULT_POLICY_VALUES.generation.oneLineCacheSize,
+        "generation.oneLineCacheSize",
+      ),
+      recentChallengeWindow: nonnegativeInteger(
+        overrides.generation?.recentChallengeWindow ??
+          DEFAULT_POLICY_VALUES.generation.recentChallengeWindow,
+        "generation.recentChallengeWindow",
+      ),
+      recentShapeWindow: nonnegativeInteger(
+        overrides.generation?.recentShapeWindow ??
+          DEFAULT_POLICY_VALUES.generation.recentShapeWindow,
+        "generation.recentShapeWindow",
+      ),
+      recentTemplateWindow: nonnegativeInteger(
+        overrides.generation?.recentTemplateWindow ??
+          DEFAULT_POLICY_VALUES.generation.recentTemplateWindow,
+        "generation.recentTemplateWindow",
+      ),
+      advancedChanceByBand: Object.fromEntries(
+        DIFFICULTY_BANDS.map((band) => [
+          band,
+          probability(
+            overrides.generation?.advancedChanceByBand?.[band] ??
+              DEFAULT_POLICY_VALUES.generation.advancedChanceByBand[band],
+            `generation.advancedChanceByBand.${band}`,
+          ),
+        ]),
+      ),
+      recognizableTheoremChance: probability(
+        overrides.generation?.recognizableTheoremChance ??
+          DEFAULT_POLICY_VALUES.generation.recognizableTheoremChance,
+        "generation.recognizableTheoremChance",
+      ),
+      metavariableMaxDepth: Object.fromEntries(
+        DIFFICULTY_BANDS.map((band) => {
+          const depth = nonnegativeInteger(
+            overrides.generation?.metavariableMaxDepth?.[band] ??
+              DEFAULT_POLICY_VALUES.generation.metavariableMaxDepth[band],
+            `generation.metavariableMaxDepth.${band}`,
+          );
+          if (depth > MAX_GENERATED_METAVARIABLE_DEPTH) {
+            throw new RangeError(
+              `generation.metavariableMaxDepth.${band} 不能超过 ${MAX_GENERATED_METAVARIABLE_DEPTH}`,
+            );
+          }
+          return [band, depth];
+        }),
+      ),
     },
   };
   if (!policy.version) throw new TypeError("难度策略版本不能为空");

@@ -2,11 +2,11 @@ import {
   RULE_OPTIONS,
   checkProof,
   normalizeRuleId,
-} from "./checker.mjs?v=review6";
+} from "./checker.mjs?v=random7";
 import {
   alphaEquivalent,
   parseFormula,
-} from "./parser.mjs?v=review6";
+} from "./parser.mjs?v=random7";
 
 const RULE_BY_ID = new Map(RULE_OPTIONS.map((rule) => [rule.id, rule]));
 

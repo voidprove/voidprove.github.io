@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { createChallengePolicy } from "../fitch/challenge-difficulty.mjs";
 import { parseFormula } from "../fitch/parser.mjs";
 import {
+  PROPOSITIONAL_ADVANCED_TEMPLATE_IDS,
   PROPOSITIONAL_CHALLENGE_TEMPLATE_BANDS,
   PROPOSITIONAL_CHALLENGE_TEMPLATE_IDS,
   createPropositionalChallengeSampler,
@@ -19,6 +20,28 @@ function seededRandom(seed) {
     state = (1664525 * state + 1013904223) >>> 0;
     return state / 2 ** 32;
   };
+}
+
+const ATOM_PERMUTATIONS = [
+  ["p", "q", "r"],
+  ["p", "r", "q"],
+  ["q", "p", "r"],
+  ["q", "r", "p"],
+  ["r", "p", "q"],
+  ["r", "q", "p"],
+];
+
+function challengeShape(challenge) {
+  return ATOM_PERMUTATIONS.map((permutation) => {
+    const names = Object.fromEntries(
+      ["p", "q", "r"].map((name, index) => [name, permutation[index]]),
+    );
+    const rename = (formula) =>
+      formula.replace(/[pqr]/gu, (name) => names[name]);
+    return `${challenge.premises.map(rename).sort().join(";")}⊢${rename(
+      challenge.conclusion,
+    )}`;
+  }).sort()[0];
 }
 
 function assertPropositional(formula) {
@@ -40,6 +63,15 @@ function assertPropositional(formula) {
     default:
       assert.fail(`non-propositional node in challenge: ${formula.kind}`);
   }
+}
+
+function formulaDepth(formula) {
+  if (formula.kind === "proposition") return 0;
+  if (formula.kind === "not") return 1 + formulaDepth(formula.value);
+  if (formula.kind === "binary") {
+    return 1 + Math.max(formulaDepth(formula.left), formulaDepth(formula.right));
+  }
+  assert.fail(`non-propositional node in depth measurement: ${formula.kind}`);
 }
 
 function collectPropositions(formula, names = new Set()) {
@@ -126,11 +158,15 @@ assert.equal(
   "the independent oracle must separately reject inconsistent premises",
 );
 
-const firstRun = seededRandom(20260731);
-const secondRun = seededRandom(20260731);
+const firstRun = createPropositionalChallengeSampler({
+  random: seededRandom(20260731),
+});
+const secondRun = createPropositionalChallengeSampler({
+  random: seededRandom(20260731),
+});
 for (let index = 0; index < 30; index += 1) {
-  const first = samplePropositionalChallenge(firstRun);
-  const second = samplePropositionalChallenge(secondRun);
+  const first = firstRun.sample();
+  const second = secondRun.sample();
   assert.deepEqual(
     first,
     second,
@@ -139,24 +175,89 @@ for (let index = 0; index < 30; index += 1) {
 }
 
 const random = seededRandom(0x5f3759df);
+const sampler = createPropositionalChallengeSampler({ random });
 const observedTemplates = new Set();
 const observedArguments = new Set();
 const bandCounts = { direct: 0, light: 0, substantial: 0 };
+const templateCounts = new Map();
+const advancedTemplateIds = new Set(PROPOSITIONAL_ADVANCED_TEMPLATE_IDS);
+const recentShapes = [];
 let noPremiseCount = 0;
 let premiseCount = 0;
+let advancedCount = 0;
+let peirceCount = 0;
+let atomicPeirceCount = 0;
+let depthThreeCount = 0;
+let fallbackCount = 0;
+let noveltyRelaxedCount = 0;
+let adjacentTemplateRepeatCount = 0;
+let recentShapeRepeatCount = 0;
+let maximumAttempts = 0;
+let previousTemplateId = null;
 const observedPremiseCounts = new Set();
 
 for (let index = 0; index < 4000; index += 1) {
-  const challenge = samplePropositionalChallenge(random);
+  const challenge = sampler.sample();
   observedTemplates.add(challenge.templateId);
+  templateCounts.set(
+    challenge.templateId,
+    (templateCounts.get(challenge.templateId) ?? 0) + 1,
+  );
   bandCounts[challenge.difficulty.band] += 1;
   observedPremiseCounts.add(challenge.premises.length);
-  observedArguments.add(`${challenge.premises.join(";")}⊢${challenge.conclusion}`);
+  observedArguments.add(
+    `${[...challenge.premises].sort().join(";")}⊢${challenge.conclusion}`,
+  );
   if (challenge.premises.length === 0) noPremiseCount += 1;
   else premiseCount += 1;
+  if (advancedTemplateIds.has(challenge.templateId)) advancedCount += 1;
+  if (challenge.templateId === "peirce-law") {
+    peirceCount += 1;
+    if (/^\(\(([pqr]) → ([pqr])\) → \1\) → \1$/u.test(challenge.conclusion)) {
+      atomicPeirceCount += 1;
+    }
+    assert.equal(challenge.difficulty.basicOnlyMetrics.maxDepth, 4);
+    assert.equal(challenge.difficulty.basicOnlyMetrics.lineCount, 11);
+  }
+  if (challenge.difficulty.metrics.maxDepth >= 3) depthThreeCount += 1;
+  if (challenge.difficulty.sampling.fallbackUsed) fallbackCount += 1;
+  if (challenge.difficulty.sampling.noveltyRelaxed) noveltyRelaxedCount += 1;
+  if (challenge.templateId === previousTemplateId) {
+    adjacentTemplateRepeatCount += 1;
+  }
+  previousTemplateId = challenge.templateId;
+  const shape = challengeShape(challenge);
+  if (recentShapes.includes(shape)) recentShapeRepeatCount += 1;
+  recentShapes.push(shape);
+  if (recentShapes.length > 8) recentShapes.shift();
+  maximumAttempts = Math.max(
+    maximumAttempts,
+    challenge.difficulty.sampling.attempts,
+  );
 
   const premises = challenge.premises.map(parseFormula);
   const conclusion = parseFormula(challenge.conclusion);
+  if (challenge.templateId === "peirce-law") {
+    const hypothesis = conclusion.left;
+    const conditional = hypothesis.left;
+    const aFormula = conclusion.right;
+    const bFormula = conditional.right;
+    assert.deepEqual(hypothesis.right, aFormula);
+    assert.deepEqual(conditional.left, aFormula);
+    const combinations = new Set(
+      independentValuations([aFormula, bFormula]).map(
+        (valuation) =>
+          `${Number(evaluateIndependently(aFormula, valuation))}${Number(
+            evaluateIndependently(bFormula, valuation),
+          )}`,
+      ),
+    );
+    assert.equal(
+      combinations.size,
+      4,
+      "Peirce metavariables must be logically independent",
+    );
+  }
   premises.forEach(assertPropositional);
   assertPropositional(conclusion);
   const propositionNames = [...[...premises, conclusion].reduce(
@@ -205,6 +306,10 @@ for (let index = 0; index < 4000; index += 1) {
     /↔|当且仅当|⊥|矛盾/u,
   );
   assert.equal(challenge.difficulty.band, challenge.difficulty.sampling.targetBand);
+  assert.equal(
+    typeof challenge.difficulty.sampling.noveltyRelaxed,
+    "boolean",
+  );
   assert.ok(challenge.difficulty.planningCost >= 0);
   assert.ok(
     challenge.difficulty.trivialityScore >= 0 &&
@@ -221,6 +326,8 @@ for (let index = 0; index < 4000; index += 1) {
   );
   assert.equal(Object.isFrozen(challenge.difficulty), true);
   assert.equal(Object.isFrozen(challenge.difficulty.metrics), true);
+  assert.equal(Object.isFrozen(challenge.difficulty.basicOnlyMetrics), true);
+  assert.deepEqual(challenge.difficulty.basicOnlyMetrics.derivedRuleIds, []);
 }
 
 assert.deepEqual(
@@ -235,7 +342,10 @@ assert.deepEqual(
   [0, 1, 2, 3],
   "sampling must cover every supported premise count",
 );
-assert.ok(observedArguments.size > 250, "sampling must produce varied arguments");
+assert.ok(
+  observedArguments.size > 2600,
+  `sampling produced only ${observedArguments.size} distinct arguments`,
+);
 assert.deepEqual(
   Object.keys(PROPOSITIONAL_CHALLENGE_TEMPLATE_BANDS).sort(),
   [...PROPOSITIONAL_CHALLENGE_TEMPLATE_IDS].sort(),
@@ -245,7 +355,7 @@ assert.deepEqual(
     (counts, band) => ({ ...counts, [band]: counts[band] + 1 }),
     { direct: 0, light: 0, substantial: 0 },
   ),
-  { direct: 8, light: 5, substantial: 3 },
+  { direct: 8, light: 5, substantial: 13 },
 );
 assert.ok(
   bandCounts.direct >= 1000 && bandCounts.direct <= 1400,
@@ -258,6 +368,126 @@ assert.ok(
 assert.ok(
   bandCounts.substantial >= 1800 && bandCounts.substantial <= 2200,
   `substantial output outside broad 50% range: ${bandCounts.substantial}`,
+);
+assert.ok(
+  advancedCount >= 300 && advancedCount <= 500,
+  `advanced tail outside broad 10% range: ${advancedCount}`,
+);
+assert.ok(
+  peirceCount >= 100 && peirceCount <= 220,
+  `Peirce's law visibility outside broad 3-5% range: ${peirceCount}`,
+);
+assert.ok(
+  atomicPeirceCount >= 50,
+  `recognizable atomic Peirce instances were too rare: ${atomicPeirceCount}`,
+);
+assert.ok(
+  depthThreeCount >= 180,
+  `too few questions require three nested scopes in the shortest stored proof: ${depthThreeCount}`,
+);
+assert.ok(fallbackCount < 10, `too many fallback samples: ${fallbackCount}`);
+assert.ok(noveltyRelaxedCount <= fallbackCount);
+assert.ok(
+  adjacentTemplateRepeatCount < 80,
+  `too many adjacent template repeats: ${adjacentTemplateRepeatCount}`,
+);
+assert.ok(
+  recentShapeRepeatCount < 20,
+  `too many recent alpha-shape repeats: ${recentShapeRepeatCount}`,
+);
+assert.ok(maximumAttempts <= 64);
+const largestTemplateShare =
+  Math.max(...templateCounts.values()) / 4000;
+assert.ok(
+  largestTemplateShare < 0.16,
+  `one template dominates ${(largestTemplateShare * 100).toFixed(2)}% of output`,
+);
+const inverseSimpson =
+  1 /
+  [...templateCounts.values()].reduce(
+    (sum, count) => sum + (count / 4000) ** 2,
+    0,
+  );
+assert.ok(
+  inverseSimpson > 12,
+  `effective template count is too low: ${inverseSimpson.toFixed(2)}`,
+);
+
+for (const [advancedChance, expectAdvanced] of [
+  [0, false],
+  [1, true],
+]) {
+  const tailPolicy = createChallengePolicy({
+    version: `forced-tail-${advancedChance}`,
+    bandWeights: { direct: 0, light: 0, substantial: 1 },
+    generation: {
+      advancedChanceByBand: { substantial: advancedChance },
+      recentChallengeWindow: 0,
+      recentShapeWindow: 0,
+      recentTemplateWindow: 0,
+    },
+  });
+  const tailSampler = createPropositionalChallengeSampler({
+    random: seededRandom(0xabc000 + advancedChance),
+    policy: tailPolicy,
+  });
+  for (let index = 0; index < 120; index += 1) {
+    assert.equal(
+      advancedTemplateIds.has(tailSampler.sample().templateId),
+      expectAdvanced,
+    );
+  }
+}
+assert.throws(
+  () =>
+    createPropositionalChallengeSampler({
+      policy: createChallengePolicy({
+        version: "impossible-direct-tail",
+        bandWeights: { direct: 1, light: 0, substantial: 0 },
+        generation: { advancedChanceByBand: { direct: 1 } },
+      }),
+    }),
+  RangeError,
+);
+
+let forcedFallbackCalls = 0;
+const forcedFallbackSampler = createPropositionalChallengeSampler({
+  random: () => (forcedFallbackCalls++ < 3 ? 0 : 0.9),
+  policy: createChallengePolicy({
+    version: "forced-independent-fallback",
+    bandWeights: { direct: 0, light: 0, substantial: 1 },
+    generation: {
+      advancedChanceByBand: { substantial: 1 },
+      recognizableTheoremChance: 0,
+      maxMetavariableAttempts: 1,
+      metavariableMaxDepth: { substantial: 2 },
+      recentChallengeWindow: 0,
+      recentShapeWindow: 0,
+      recentTemplateWindow: 0,
+    },
+  }),
+});
+const forcedFallbackChallenge = forcedFallbackSampler.sample();
+assert.equal(forcedFallbackChallenge.templateId, "peirce-law");
+const forcedFallbackConclusion = parseFormula(forcedFallbackChallenge.conclusion);
+const forcedFallbackA = forcedFallbackConclusion.right;
+const forcedFallbackB = forcedFallbackConclusion.left.left.right;
+assert.equal(forcedFallbackA.kind, "binary");
+assert.equal(forcedFallbackA.operator, "and");
+assert.equal(forcedFallbackA.left.operator, "implies");
+assert.equal(forcedFallbackA.right.operator, "implies");
+assert.ok(formulaDepth(forcedFallbackA) <= 2);
+assert.ok(formulaDepth(forcedFallbackB) <= 2);
+assert.equal(
+  new Set(
+    independentValuations([forcedFallbackA, forcedFallbackB]).map(
+      (valuation) =>
+        `${Number(evaluateIndependently(forcedFallbackA, valuation))}${Number(
+          evaluateIndependently(forcedFallbackB, valuation),
+        )}`,
+    ),
+  ).size,
+  4,
 );
 
 for (const forcedBand of ["direct", "light", "substantial"]) {
@@ -284,6 +514,28 @@ for (const forcedBand of ["direct", "light", "substantial"]) {
     assert.equal(constantSampler.sample().difficulty.band, forcedBand);
   }
 }
+
+const exhaustedNoveltySampler = createPropositionalChallengeSampler({
+  random: () => 0,
+  policy: createChallengePolicy({
+    version: "constant-novelty-audit",
+    bandWeights: { direct: 1, light: 0, substantial: 0 },
+  }),
+});
+let exhaustedNoveltyChallenge = null;
+for (let index = 0; index < 12; index += 1) {
+  const challenge = exhaustedNoveltySampler.sample();
+  if (challenge.difficulty.sampling.noveltyRelaxed) {
+    exhaustedNoveltyChallenge = challenge;
+    break;
+  }
+}
+assert.ok(
+  exhaustedNoveltyChallenge,
+  "constant randomness should eventually exhaust the novelty window",
+);
+assert.equal(exhaustedNoveltyChallenge.difficulty.sampling.attempts, 64);
+assert.equal(exhaustedNoveltyChallenge.difficulty.sampling.fallbackUsed, true);
 
 assert.equal(
   detectOneLineProof({ premises: ["p ∧ q"], conclusion: "q" })?.rule,
@@ -332,4 +584,5 @@ assert.throws(() => samplePropositionalChallenge(() => Number.NaN), RangeError);
 
 console.log(
   `Propositional challenge generator passed 4000 valid samples across ${observedTemplates.size} templates (${bandCounts.direct}/${bandCounts.light}/${bandCounts.substantial} direct/light/substantial; ${noPremiseCount} with no premises).`,
+  `${advancedCount} advanced, ${peirceCount} Peirce (${atomicPeirceCount} atomic), ${observedArguments.size} distinct arguments.`,
 );

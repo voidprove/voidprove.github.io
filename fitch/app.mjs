@@ -1,8 +1,8 @@
-import { checkProof } from "./checker.mjs?v=review6";
+import { checkProof } from "./checker.mjs?v=random7";
 import {
   analyzeRuleUsage,
   checkChallengeProof,
-} from "./challenge-checker.mjs?v=review6";
+} from "./challenge-checker.mjs?v=random7";
 import {
   citationReferencesLine,
   makeSubproofAssumption,
@@ -10,8 +10,8 @@ import {
   pathForNextLine,
   shiftCitationsForAddedPremise,
   shiftCitationsForRemovedPremise,
-} from "./editor-model.mjs?v=review6";
-import { createPropositionalChallengeSampler } from "./propositional-challenges.mjs?v=review6";
+} from "./editor-model.mjs?v=random7";
+import { createPropositionalChallengeSampler } from "./propositional-challenges.mjs?v=random7";
 
 const RULE_GROUPS = Object.freeze([
   {
@@ -110,7 +110,6 @@ const savedWorkspaces = {
 };
 
 const challengeSampler = createPropositionalChallengeSampler();
-const MAX_DIFFERENT_CHALLENGE_ATTEMPTS = 6;
 
 function blankProofLine(id = 1) {
   return {
@@ -145,26 +144,8 @@ function restoreWorkspace(workspace) {
   state.markedDerivedLineIds.clear();
 }
 
-function challengeKey(challenge) {
-  return `${challenge.premises.join(";")}⊢${challenge.conclusion}`;
-}
-
-function sampleDifferentChallenge(previous = null) {
-  const previousKey = previous ? challengeKey(previous) : null;
-  let challenge;
-  for (
-    let attempt = 0;
-    attempt < MAX_DIFFERENT_CHALLENGE_ATTEMPTS;
-    attempt += 1
-  ) {
-    challenge = challengeSampler.sample();
-    if (challengeKey(challenge) !== previousKey) return challenge;
-  }
-  return challenge;
-}
-
-function createTestWorkspace(previousChallenge = null) {
-  const challenge = sampleDifferentChallenge(previousChallenge);
+function createTestWorkspace() {
+  const challenge = challengeSampler.sample();
   return {
     challenge,
     premises: challenge.premises.map((formula, index) => ({
@@ -579,7 +560,7 @@ function switchMode(mode) {
 function newChallenge() {
   if (state.mode !== "test") return;
   invalidateResult();
-  const workspace = createTestWorkspace(state.challenge);
+  const workspace = createTestWorkspace();
   savedWorkspaces.test = workspace;
   restoreWorkspace(workspace);
   renderWorkspace({ focusProof: true });
