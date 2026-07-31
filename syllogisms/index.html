@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="快速练习亚里士多德 AEIO 直言三段论，不作存在预设。"
+    />
+    <meta name="theme-color" content="#f8fafd" />
+    <title>三段论速练 · Logic Lab</title>
+    <link rel="stylesheet" href="./styles.css?v=20260731" />
+  </head>
+  <body>
+    <a class="skip-link" href="#practice">跳到练习</a>
+
+    <header class="top-app-bar">
+      <div class="top-app-bar__content">
+        <h1>三段论速练</h1>
+        <a class="text-link" href="/about.html">主页</a>
+      </div>
+    </header>
+
+    <main id="practice" class="page">
+      <section class="practice-shell">
+        <div id="empty-state" class="empty-state">
+          <h2>判断结论是否成立</h2>
+          <p>全称命题不作存在预设。</p>
+        </div>
+
+        <div id="question" class="question-grid" hidden>
+          <section class="premises-panel" tabindex="-1" aria-labelledby="premises-title">
+            <h2 id="premises-title" class="section-label">前提</h2>
+            <ol id="premises" class="premises-list"></ol>
+          </section>
+
+          <fieldset class="conclusion-panel">
+            <legend>结论能推出吗？</legend>
+            <div class="conclusion-card">
+              <span class="conclusion-card__label">结论</span>
+              <strong id="conclusion">—</strong>
+            </div>
+            <div id="judgment-options" class="judgment-options">
+              <label class="judgment-option" data-answer="true">
+                <input type="radio" name="judgment" value="true" />
+                <span>是，能够推出</span>
+              </label>
+              <label class="judgment-option" data-answer="false">
+                <input type="radio" name="judgment" value="false" />
+                <span>否，不能推出</span>
+              </label>
+            </div>
+            <button id="submit-answer" class="button button--primary" type="button" disabled>
+              提交判断
+            </button>
+          </fieldset>
+        </div>
+
+        <section id="feedback" class="feedback" aria-labelledby="feedback-title" hidden>
+          <div class="feedback__result">
+            <h2 id="feedback-title">—</h2>
+            <p id="feedback-summary">—</p>
+          </div>
+          <div class="feedback__review">
+            <span>正确答案</span>
+            <div class="answer-verdict">
+              <strong id="correct-judgment">—</strong>
+              <span id="correct-conclusion">—</span>
+            </div>
+          </div>
+          <section class="post-analysis" aria-labelledby="analysis-title">
+            <h3 id="analysis-title">题后分析</h3>
+            <div id="analysis-content"></div>
+          </section>
+        </section>
+      </section>
+
+      <aside class="floating-controls" aria-label="练习状态与操作">
+        <div class="floating-metric">
+          <span>题目</span>
+          <strong id="question-number">—</strong>
+        </div>
+        <div class="floating-metric timer" aria-label="本题用时">
+          <span>用时</span>
+          <strong id="timer">0.0 秒</strong>
+        </div>
+        <div class="floating-metric">
+          <span>正确率</span>
+          <strong id="stat-accuracy">—</strong>
+        </div>
+        <div class="display-mode">
+          <label for="letter-mode">字母形式</label>
+          <input
+            id="letter-mode"
+            type="checkbox"
+            role="switch"
+            aria-label="切换字母词项与标准 AEIO 句式"
+          />
+          <span id="mode-status" class="sr-only">
+            自然语言：词项与等价句式随机变化
+          </span>
+        </div>
+        <button id="next-challenge" class="button button--tonal" type="button">
+          开始挑战
+        </button>
+      </aside>
+    </main>
+
+    <p id="live-region" class="sr-only" aria-live="polite"></p>
+    <script type="module" src="./app.mjs?v=20260731"></script>
+  </body>
+</html>
