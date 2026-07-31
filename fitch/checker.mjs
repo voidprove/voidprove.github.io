@@ -5,7 +5,7 @@ import {
   parseFormula,
   termEquals,
   validateSignatures,
-} from "./parser.mjs?v=review6";
+} from "./parser.mjs?v=random7";
 
 const option = (id, label, kind, hint) => Object.freeze({ id, label, kind, hint });
 
