@@ -33,7 +33,7 @@ function renderLevels() {
   $('stage-label').textContent = `${String(progress.current).padStart(2,'0')} / ${name}`;
 }
 function tokenMarkup(t) {
-  return `<button class="token ${t.type} ${selected === t.id ? 'selected' : ''}" data-token="${t.id}" aria-label="${t.type === 'box' ? 'Box' : 'Diamond'} ${t.id+1}${t.slot === null ? ', select then choose a slot' : ', placed at slot '+(t.slot+1)+', click to return'}" aria-pressed="${selected === t.id}">${symbols[t.type]}</button>`;
+  return `<button class="token ${t.type} ${selected === t.id ? 'selected' : ''}" data-token="${t.id}" aria-label="${t.type === 'box' ? 'Box' : 'Diamond'} ${t.id+1}${t.slot === null ? ', select then choose a slot' : ', placed at slot '+(t.slot+1)+', click to return'}" aria-pressed="${selected === t.id}"><span class="operator-icon operator-icon--${t.type}" aria-hidden="true"></span></button>`;
 }
 function renderFormula() {
   $('tokens').innerHTML = tokens.filter(t => t.slot === null).map(tokenMarkup).join('') || '<span class="empty-bank">All operators placed ✓</span>';
