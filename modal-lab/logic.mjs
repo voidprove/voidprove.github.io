@@ -1,3 +1,5 @@
+import { analyzePuzzle, enumeratePlacements } from './puzzle-quality.mjs';
+
 // Finite Kripke semantics for normal modal logic K. Stacks read outside-in.
 export const atom = name => ({ type: 'atom', name });
 export const unary = child => ({ type: 'not', child });
@@ -56,8 +58,17 @@ const templates = [
   () => binary('and', binary('implies', atom('p'), atom('q')), atom('p')),
   () => binary('or', binary('and', atom('p'), atom('q')), atom('r')),
 ];
-export function generatePuzzle(level, seed) {
+// Audited serial models, each with exactly one solution for its inventory.
+// Used only when the bounded random search cannot meet the quality limits.
+const fallbackModels = {
+  2: {worlds:[{atoms:[]},{atoms:['p']},{atoms:['p','q','r']},{atoms:['q','r']}],edges:[[0,0],[0,1],[0,3],[1,3],[2,0],[2,1],[3,0],[3,1]],actual:0},
+  3: {worlds:[{atoms:[]},{atoms:['q']},{atoms:['p','q','r']},{atoms:['p','r']},{atoms:['r']}],edges:[[0,0],[0,2],[4,0],[4,1],[1,0],[2,4],[3,1]],actual:0},
+  4: {worlds:[{atoms:['r']},{atoms:['p','r']},{atoms:['q','r']},{atoms:['r']},{atoms:['p']},{atoms:['p','q','r']}],edges:[[0,3],[1,3],[1,5],[2,5],[3,1],[3,4],[4,3],[5,3]],actual:0},
+};
+export const GENERATION_LIMITS = Object.freeze({maxSolutions:3, maxSolutionRate:0.15, maxVacuousSolutions:0, maxAttempts:350});
+export function generatePuzzle(level, seed, {maxAttempts = GENERATION_LIMITS.maxAttempts} = {}) {
   if (!Number.isSafeInteger(level) || level < 1) throw new Error('Level must be a positive integer');
+  if (!Number.isInteger(maxAttempts) || maxAttempts < 0 || maxAttempts > GENERATION_LIMITS.maxAttempts) throw new Error('Invalid generation attempt limit');
   const rng = random((seed ^ Math.imul(level, 2654435761)) >>> 0);
   const pick = a => a[Math.floor(rng() * a.length)];
   const count = level <= 2 ? 1 : level <= 5 ? 2 : level <= 9 ? 3 : 4;
@@ -68,27 +79,25 @@ export function generatePuzzle(level, seed) {
     if (level === 1 && rng() < .5) [worlds[1], worlds[2]] = [worlds[2], worlds[1]];
     return {level, seed, inventory, formula:indexTree(atom('p')), model:{worlds,edges:[[0,1],[0,2]],actual:0}, witness:{0:[tokens[0]]}};
   }
-  for (let attempt = 0; attempt < 350; attempt++) {
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
     const formula = indexTree(templates[Math.floor(rng() * (level < 6 ? 4 : templates.length))]());
     const size = Math.min(6, 3 + Math.floor(level / 3));
     const worlds = Array.from({length:size}, () => ({atoms:['p','q','r'].filter(() => rng() < .48)}));
     const edges = [];
     for (let a = 0; a < size; a++) for (let b = 0; b < size; b++) if (rng() < (a === b ? .10 : .30)) edges.push([a,b]);
     if (!edges.some(e => e[0] === 0)) edges.push([0, 1]);
+    // Usually give terminal worlds a successor, but retain some dead ends.
+    // Exact quality checks below decide whether they make a puzzle too easy.
+    for (let w = 0; w < size; w++) if (!edges.some(e => e[0] === w) && rng() < .8) edges.push([w, pick(Array.from({length:size}, (_,i) => i).filter(i => i !== w))]);
     const model = {worlds, edges, actual:0};
     if (evaluate(model, formula)) continue;
-    const slots = nodes(formula).map(n => n.id);
-    let witness = null, rejected = false;
-    for (let sample = 0; sample < 80; sample++) {
-      const placement = {};
-      const shuffled = [...tokens];
-      for (let i = shuffled.length - 1; i > 0; i--) { const j = Math.floor(rng() * (i + 1)); [shuffled[i],shuffled[j]] = [shuffled[j],shuffled[i]]; }
-      for (const token of shuffled) (placement[pick(slots)] ??= []).push(token);
-      if (evaluate(model, formula, placement)) witness ??= placement; else rejected = true;
-      if (witness && rejected) return {level, seed, inventory, formula, model, witness};
-    }
+    const maxSolutions = Math.min(GENERATION_LIMITS.maxSolutions, Math.floor(enumeratePlacements(formula, inventory).length * GENERATION_LIMITS.maxSolutionRate));
+    if (!maxSolutions) continue;
+    const candidate = {level, seed, inventory, formula, model};
+    const quality = analyzePuzzle(candidate, {maxSolutions, maxVacuousSolutions:GENERATION_LIMITS.maxVacuousSolutions});
+    if (quality.exhaustive && quality.solutionCount > 0) return {...candidate, witness:quality.witness, quality};
   }
-  // A constructive fallback: any nonempty modal string takes false p at w0
-  // to true p at a reflexive successor. The inventory is preserved exactly.
-  return {level, seed, inventory, formula:indexTree(binary('and',atom('p'),atom('q'))), model:{worlds:[{atoms:['q']},{atoms:['p','q']}],edges:[[0,1],[1,1]],actual:0}, witness:{1:tokens}};
+  const fallback = {level, seed, inventory, formula:indexTree(binary('and',atom('p'),atom('q'))), model:structuredClone(fallbackModels[count])};
+  const quality = analyzePuzzle(fallback);
+  return {...fallback, witness:quality.witness, quality};
 }
