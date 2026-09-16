@@ -11,7 +11,7 @@
 </head>
 <body>
   <a class="skip" href="#formula-heading">Skip to puzzle</a>
-  <header class="topbar"><a class="brand" href="./"><span class="brand-icon">◇</span> MODAL<span class="brand-light">LAB</span></a><span class="tagline">A game of possible worlds</span><button class="quiet" id="help">How to play <span aria-hidden="true">↗</span></button></header>
+  <header class="topbar"><a class="brand" href="./"><span class="brand-icon" aria-hidden="true"><span class="operator-icon operator-icon--diamond"></span></span> MODAL<span class="brand-light">LAB</span></a><span class="tagline">A game of possible worlds</span><button class="quiet" id="help">How to play <span aria-hidden="true">↗</span></button></header>
   <main>
     <section class="heading"><div><div class="eyebrow">THE MODAL PLAYGROUND</div><h1>Make it true.</h1><p>A few possible worlds. One actual world. Find the right modality.</p></div><div class="progress-caption"><span id="solved-count">0</span> levels solved <span class="small-note">Progress saved on this device</span></div></section>
     <nav class="level-nav" aria-label="Level progression"><div id="levels"></div><span id="stage-label">01 / POSSIBILITY</span></nav>
@@ -25,8 +25,8 @@
       <aside class="mission-panel">
         <span class="eyebrow">YOUR MISSION</span><h2>One world.<br>One true formula.</h2>
         <p>Place every operator into the formula so it is <strong>true at w₀</strong>, the actual world.</p>
-        <div class="rule"><span class="rule-symbol diamond">◇</span><div><strong>Diamond · possibly</strong><p>True at <em>at least one</em> accessible world.</p></div></div>
-        <div class="rule"><span class="rule-symbol box">□</span><div><strong>Box · necessarily</strong><p>True at <em>every</em> accessible world.</p></div></div>
+        <div class="rule"><span class="rule-symbol diamond" aria-hidden="true"><span class="operator-icon operator-icon--diamond"></span></span><div><strong>Diamond · possibly</strong><p>True at <em>at least one</em> accessible world.</p></div></div>
+        <div class="rule"><span class="rule-symbol box" aria-hidden="true"><span class="operator-icon operator-icon--box"></span></span><div><strong>Box · necessarily</strong><p>True at <em>every</em> accessible world.</p></div></div>
         <div class="mission-note"><span aria-hidden="true">↳</span> Follow arrows out of a world. Two arrowheads mean access both ways. A loop leads back to itself.</div>
       </aside>
     </div>
