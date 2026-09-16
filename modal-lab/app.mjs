@@ -65,28 +65,30 @@ function renderGraph() {
   const {model} = puzzle, positions = graphPositions(model.worlds.length);
   $('graph').setAttribute('viewBox', mobileGraph.matches ? '0 0 420 390' : '0 0 640 380');
   const relation = model.edges;
-  $('world-count').textContent = `${model.worlds.length} worlds · ${relation.length} arrows`;
+  // Render a reciprocal pair once; the model still contains both directions.
+  const links = relation.filter(([a,b]) => a <= b || !relation.some(([c,d]) => c === b && d === a));
+  $('world-count').textContent = `${model.worlds.length} worlds · ${links.length} links`;
   const defs = `<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#70889c"/></marker><marker id="arrow-active" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#9ce8d1"/></marker></defs>`;
-  const edges = relation.map(([a,b]) => {
+  const edges = links.map(([a,b]) => {
     const [x,y] = positions[a], [u,v] = positions[b];
+    const mutual = a !== b && relation.some(([c,d]) => c === b && d === a);
     let d;
     if (a === b) {
       d = y < 110
-        ? `M ${x+29} ${y-28} C ${x+103} ${y-80},${x+103} ${y+80},${x+31} ${y+29}`
-        : `M ${x-28} ${y-29} C ${x-80} ${y-103},${x+80} ${y-103},${x+29} ${y-31}`;
+        ? `M ${x+39} ${y-38} C ${x+120} ${y-90},${x+120} ${y+90},${x+42} ${y+40}`
+        : `M ${x-38} ${y-39} C ${x-90} ${y-120},${x+90} ${y-120},${x+40} ${y-42}`;
     }
     else {
       const dx=u-x,dy=v-y,len=Math.hypot(dx,dy),nx=dx/len,ny=dy/len;
-      const bend=relation.some(([c,e])=>c===b&&e===a)?30:0;
-      const sx=x+nx*44-ny*bend*.38,sy=y+ny*44+nx*bend*.38,ex=u-nx*48-ny*bend*.38,ey=v-ny*48+nx*bend*.38;
-      d=`M ${sx} ${sy} Q ${(x+u)/2-ny*bend} ${(y+v)/2+nx*bend} ${ex} ${ey}`;
+      const start = mutual ? 61 : 56;
+      d=`M ${x+nx*start} ${y+ny*start} L ${u-nx*61} ${v-ny*61}`;
     }
-    return `<path class="edge ${a===inspected?'highlight':''}" d="${d}" marker-end="url(#${a===inspected?'arrow-active':'arrow'})"><title>w${a} accesses w${b}</title></path>`;
+    return `<path class="edge ${a===inspected||(mutual&&b===inspected)?'highlight':''}" d="${d}" ${mutual?`marker-start="url(#${b===inspected?'arrow-active':'arrow'})"`:''} marker-end="url(#${a===inspected?'arrow-active':'arrow'})"><title>${mutual?`w${a} and w${b} access each other`:`w${a} accesses w${b}`}</title></path>`;
   }).join('');
   const worlds = model.worlds.map((w,i) => {
     const [x,y] = positions[i], truth = checked ? evaluate(model,puzzle.formula,placement(),i) : null;
     const label = `World w${i}${i===model.actual?', actual world':''}; true atoms: ${w.atoms.join(', ')||'none'}${truth===null?'':`; formula is ${truth?'true':'false'}`}`;
-    return `<g class="world ${i===model.actual?'actual':''} ${i===inspected?'inspected':''}" transform="translate(${x},${y})" tabindex="0" role="button" aria-label="${label}" data-world="${i}"><circle class="halo" r="49"/><circle class="disc" r="41"/><text class="world-name" y="-2">w<tspan baseline-shift="sub" font-size="15">${i}</tspan></text><text class="atom-label" y="21">${w.atoms.join(', ')||'∅'}</text>${i===model.actual?'<text class="actual-label" y="73">ACTUAL WORLD</text>':''}${truth===null?'':`<circle cx="33" cy="-31" r="11" fill="${truth?'#9ce8d1':'#ffc4ad'}"/><text x="33" y="-27" style="fill:#13283b;font:700 12px sans-serif">${truth?'T':'F'}</text>`}</g>`;
+    return `<g class="world ${i===model.actual?'actual':''} ${i===inspected?'inspected':''}" transform="translate(${x},${y})" tabindex="0" role="button" aria-label="${label}" data-world="${i}"><circle class="halo" r="62"/><circle class="disc" r="54"/><text class="world-name" y="-23">w<tspan baseline-shift="sub" font-size="10">${i}</tspan></text><text class="atom-label" y="17">${w.atoms.join(', ')||'∅'}</text>${i===model.actual?'<text class="actual-label" y="84">ACTUAL WORLD</text>':''}${truth===null?'':`<circle cx="43" cy="-41" r="12" fill="${truth?'#9ce8d1':'#ffc4ad'}"/><text x="43" y="-37" style="fill:#13283b;font:700 13px sans-serif">${truth?'T':'F'}</text>`}</g>`;
   }).join('');
   $('graph').innerHTML = defs + edges + worlds;
   const successors = relation.filter(e=>e[0]===inspected).map(e=>`w${e[1]}`);
