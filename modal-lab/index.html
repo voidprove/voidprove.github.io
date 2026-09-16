@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#13283b">
+  <meta name="description" content="Explore possible worlds. Drag boxes and diamonds into modal formulas, test their truth, and unlock an endless sequence of logic puzzles.">
+  <title>Modal Lab — A game of possible worlds</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%2313283b'/%3E%3Cpath d='M20 7 33 20 20 33 7 20Z' fill='none' stroke='%238ce3ca' stroke-width='3'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./app.mjs"></script>
+</head>
+<body>
+  <a class="skip" href="#formula-heading">Skip to puzzle</a>
+  <header class="topbar"><a class="brand" href="./"><span class="brand-icon">◇</span> MODAL<span class="brand-light">LAB</span></a><span class="tagline">A game of possible worlds</span><button class="quiet" id="help">How to play <span aria-hidden="true">↗</span></button></header>
+  <main>
+    <section class="heading"><div><div class="eyebrow">THE MODAL PLAYGROUND</div><h1>Make it true.</h1><p>A few possible worlds. One actual world. Find the right modality.</p></div><div class="progress-caption"><span id="solved-count">0</span> levels solved <span class="small-note">Progress saved on this device</span></div></section>
+    <nav class="level-nav" aria-label="Level progression"><div id="levels"></div><span id="stage-label">01 / POSSIBILITY</span></nav>
+    <div class="workspace">
+      <section class="model-panel" aria-labelledby="model-heading">
+        <div class="panel-top"><div><span class="eyebrow">01 / EXPLORE</span><h2 id="model-heading">The possible worlds</h2></div><span class="model-badge" id="world-count"></span></div>
+        <div class="graph-wrap"><svg id="graph" viewBox="0 0 640 380" role="group" aria-label="Directed graph of the modal model"></svg></div>
+        <div class="graph-legend"><span><i class="actual-key"></i> Actual world</span><span><i class="arrow-key">⟶</i> Accessible world</span><span>Labels = true atoms</span></div>
+        <div class="world-detail" id="world-detail" aria-live="polite"></div>
+      </section>
+      <aside class="mission-panel">
+        <span class="eyebrow">YOUR MISSION</span><h2>One world.<br>One true formula.</h2>
+        <p>Place every operator into the formula so it is <strong>true at w₀</strong>, the actual world.</p>
+        <div class="rule"><span class="rule-symbol diamond">◇</span><div><strong>Diamond · possibly</strong><p>True at <em>at least one</em> accessible world.</p></div></div>
+        <div class="rule"><span class="rule-symbol box">□</span><div><strong>Box · necessarily</strong><p>True at <em>every</em> accessible world.</p></div></div>
+        <div class="mission-note"><span aria-hidden="true">↳</span> Follow arrows out of a world. Only a drawn loop leads back to itself.</div>
+      </aside>
+    </div>
+    <section class="formula-panel" aria-labelledby="formula-heading">
+      <div class="panel-top"><div><span class="eyebrow">02 / EXPERIMENT</span><h2 id="formula-heading" tabindex="-1">Build your formula</h2></div><button class="quiet" id="reset">↺ Reset placement</button></div>
+      <div class="builder"><div class="operator-bank" id="bank"><span class="bank-title">YOUR OPERATORS <span id="remaining"></span></span><div id="tokens"></div><span class="bank-note">Drag to a caret, or select then tap</span></div><div class="formula-area"><div class="formula-scroll"><div id="formula" class="formula" aria-label="Formula with operator insertion slots"></div></div><p id="formula-caption">Use every operator to make the formula true at w₀. Stack operators to nest them.</p></div></div>
+      <div class="action-row"><div class="feedback" id="feedback" role="status" aria-live="polite">Start with the arrows from <strong>w₀</strong>. What can you reach?</div><div class="actions"><button class="quiet" id="hint">Need a hint?</button><button class="primary" id="check">Check formula <span aria-hidden="true">↗</span></button><button class="primary success" id="next" hidden>Next level <span aria-hidden="true">→</span></button></div></div>
+      <div id="evaluation" class="evaluation" hidden></div>
+    </section>
+    <footer><span>◇ &nbsp; Normal modal logic K · finite Kripke models</span><span>Generated puzzles. Every level has a solution.</span></footer>
+  </main>
+  <dialog id="help-dialog"><div class="dialog-top"><span class="eyebrow">A QUICK FIELD GUIDE</span><button class="quiet" id="close-help" aria-label="Close instructions">✕</button></div><h2>Think in possible worlds.</h2><p>Each circle is a world. Its labels list exactly the propositional atoms true there; unlisted atoms are false. The mint circle, <strong>w₀</strong>, is the actual world.</p><p><strong>◇φ</strong> is true if φ holds at some outgoing neighbor. <strong>□φ</strong> is true if φ holds at every outgoing neighbor. At a world with no outgoing arrows, □φ is true and ◇φ is false.</p><p>Drag your operators to the small carets beneath the formula. Each caret marks the gap just before the symbol to its right; clicking that symbol works too. A slot can hold several operators, read from left to right: <strong>□◇p</strong> means “at every next world, possibly p.” Operators placed before parentheses apply to the whole parenthesized formula.</p><p>You can also select an operator and then click a slot, or use <kbd>Tab</kbd> and <kbd>Enter</kbd>. Click a placed operator to return it, or drag it to another slot. <kbd>Esc</kbd> cancels selection.</p><p><strong>¬</strong> means not, <strong>∧</strong> and, <strong>∨</strong> or, and <strong>→</strong> if…then (false only when its left side is true and its right side false).</p><p>Use the exact inventory. A correct answer unlocks the next generated level; any valid solution counts. Your progress is saved in this browser.</p><button class="primary" id="start-playing">Let’s experiment →</button></dialog>
+</body>
+</html>

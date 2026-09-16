@@ -31,6 +31,10 @@ main = hakyll $ do
         route   idRoute
         compile copyFileCompiler
 
+    match "modal-lab/*" $ do
+        route   idRoute
+        compile copyFileCompiler
+
     match "about.html" $ do
         route   idRoute
         compile $ getResourceBody
