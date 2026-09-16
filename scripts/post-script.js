@@ -29,3 +29,18 @@ window.onscroll = function() {
     }
 };
 
+var labsMenu = document.getElementById("labs-menu");
+if (labsMenu) {
+    document.addEventListener("pointerdown", function(event) {
+        if (!labsMenu.contains(event.target)) labsMenu.open = false;
+    });
+    document.addEventListener("keydown", function(event) {
+        if (event.key === "Escape" && labsMenu.open) {
+            labsMenu.open = false;
+            labsMenu.querySelector("summary").focus();
+        }
+    });
+    labsMenu.addEventListener("focusout", function(event) {
+        if (!labsMenu.contains(event.relatedTarget)) labsMenu.open = false;
+    });
+}
