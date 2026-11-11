@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f8f7f3">
+  <meta name="description" content="Build a Kripke model by connecting possible worlds. Solve puzzles with unrestricted, reflexive, symmetric, and other accessibility relations.">
+  <title>Arrow Lab — Connect possible worlds</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%23293883'/%3E%3Cpath d='M11 29 29 11M18 11h11v11' fill='none' stroke='white' stroke-width='2.5'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif&display=swap">
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./app.mjs"></script>
+</head>
+<body>
+  <a class="skip-link" href="#puzzle">Skip to puzzle</a>
+  <header class="masthead">
+    <a class="brand" href="./"><span class="brand-icon" aria-hidden="true">↗</span> Arrow Lab</a>
+    <nav aria-label="Site links">
+      <a href="../">Site home</a>
+      <button type="button" class="text-button" id="help">How to play <span aria-hidden="true">↗</span></button>
+    </nav>
+  </header>
+  <main>
+    <section class="intro" aria-labelledby="page-title">
+      <div>
+        <h1 id="page-title">Make every world true.</h1>
+        <p>Connect possible worlds so every formula holds where it’s written.</p>
+      </div>
+      <p class="progress" id="progress"></p>
+    </section>
+
+    <section class="workspace" id="puzzle" tabindex="-1" aria-label="Puzzle">
+      <section class="board-card" aria-labelledby="level-title">
+        <div class="board-header">
+          <h2 id="level-title"></h2>
+          <div class="level-picker">
+            <button class="icon-button" id="previous" aria-label="Previous puzzle" type="button">←</button>
+            <div class="level-select-wrap">
+              <span id="level-position" aria-hidden="true"></span>
+              <select id="level-select" aria-label="Choose a puzzle"></select>
+            </div>
+            <button class="icon-button" id="next" aria-label="Next puzzle" type="button">→</button>
+          </div>
+        </div>
+        <p class="board-rule" id="board-rule"></p>
+        <div class="board" id="board" role="group" aria-label="Possible worlds">
+          <svg class="edge-layer" id="edge-layer" aria-hidden="true"></svg>
+          <div class="world-layer" id="world-layer"></div>
+        </div>
+        <div class="board-footer">
+          <p id="interaction" role="status" aria-live="polite">Select a world, then its destination. You can also drag.</p>
+          <div class="edit-controls">
+            <button class="text-button" id="undo" type="button">Undo</button>
+            <button class="text-button" id="clear" type="button">Clear</button>
+          </div>
+        </div>
+      </section>
+
+      <aside class="sidebar" aria-label="Puzzle controls">
+        <section class="relation-card" aria-labelledby="rule-title">
+          <div class="rule-heading"><span class="rule-icon" id="rule-icon" aria-hidden="true"></span><h2 id="rule-title"></h2></div>
+          <p id="rule-text"></p>
+          <div class="arrow-stats">
+            <div><strong id="arrow-count">0</strong><span>Arrows placed</span></div>
+            <div><strong id="minimum"></strong><span>Fewest possible</span></div>
+          </div>
+          <div class="action-buttons">
+            <button class="primary" id="check" type="button">Check model <span aria-hidden="true">✓</span></button>
+            <button class="secondary" id="hint" type="button">Hint</button>
+          </div>
+          <div role="status" aria-live="polite"><p class="feedback" id="feedback" hidden></p></div>
+          <button class="secondary advance" id="advance" type="button" hidden>Next puzzle <span aria-hidden="true">→</span></button>
+        </section>
+        <section class="edges-card" aria-labelledby="edge-heading">
+          <h2 id="edge-heading">Your arrows</h2>
+          <p class="empty-edges" id="empty-edges">Arrows will appear here. Select one to remove it.</p>
+          <ul id="edge-list" class="edge-list"></ul>
+        </section>
+      </aside>
+    </section>
+    <footer>
+      <span>Finite Kripke models · □ necessity · ◇ possibility</span>
+      <span>Progress stays in this browser.</span>
+    </footer>
+  </main>
+  <dialog id="guide" aria-labelledby="guide-title">
+    <form method="dialog">
+      <div class="dialog-header">
+        <h2 id="guide-title">How to play</h2>
+        <button class="icon-button" aria-label="Close instructions" value="close">×</button>
+      </div>
+      <p>Every card is a world. The first line fixes which propositional letters are true there. Add arrows until every formula on every card is true and the relation follows the puzzle’s rule.</p>
+      <dl class="guide-key">
+        <div><dt>◇φ</dt><dd>At least one outgoing arrow leads to a world where φ is true.</dd></div>
+        <div><dt>□φ</dt><dd>Every outgoing arrow leads to a world where φ is true. This holds if there are no outgoing arrows.</dd></div>
+        <div><dt>¬φ</dt><dd>φ is false. The symbols ∧, ∨, and → mean “and,” “or,” and “if … then.”</dd></div>
+      </dl>
+      <p>Select a source and a destination by click, tap, or keyboard. Select the same world twice for a loop. You can also drag between worlds. Repeating a connection removes it, and a double arrowhead counts as two arrows. Press Escape to cancel a selection.</p>
+      <p>Any model that meets the requirements counts. Try to use the fewest arrows shown on the puzzle.</p>
+      <button class="primary" value="play">Back to puzzle <span aria-hidden="true">→</span></button>
+    </form>
+  </dialog>
+  <noscript><p class="no-script">Arrow Lab needs JavaScript to draw and check your model.</p></noscript>
+</body>
+</html>
