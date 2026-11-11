@@ -35,6 +35,10 @@ main = hakyll $ do
         route   idRoute
         compile copyFileCompiler
 
+    match "arrow-lab/*" $ do
+        route   idRoute
+        compile copyFileCompiler
+
     match "about.html" $ do
         route   idRoute
         compile $ getResourceBody
